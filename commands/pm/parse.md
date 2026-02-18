@@ -16,8 +16,8 @@ Parse $ARGUMENTS to extract `project` and `feature-name`. If either is missing, 
 "Usage: /pm:parse <project> <feature-name>"
 
 Read these files:
-- `<project>/specs/<feature-name>.md` -- the spec to parse (required; stop if not found)
-- `<project>/CLAUDE.md` -- product and technical context
+- `<project>/specs/<feature-name>.md`: the spec to parse (required; stop if not found)
+- `<project>/CLAUDE.md`: product and technical context
 
 If the spec does not exist, tell the PM: "No spec found at <project>/specs/<feature-name>.md. Run /pm:spec <project> <feature-name> first."
 
@@ -27,35 +27,9 @@ Check if `<project>/epics/<feature-name>/` already exists. If it does, ask the P
 
 Create directory `<project>/epics/<feature-name>/`.
 
-Write `<project>/epics/<feature-name>/epic.md` using this format:
+Read `templates/epic.md` and use it as the output structure. Fill in all fields from the spec and today's date.
 
-```
----
-title: <Feature Name>
-type: epic
-status: local
-created: <today>
-updated: <today>
-github_url:
-github_id:
-spec: specs/<feature-name>.md
----
-
-# <Feature Name> -- Epic
-
-## Overview
-[Brief summary of the full scope and technical approach based on the spec]
-
-## Task Breakdown
-
-| # | Title | Size | Depends on |
-|---|---|---|---|
-| 001 | [task title] | [size] | -- |
-| 002 | [task title] | [size] | 001 |
-
-## Notes
-[Any implementation notes or decisions made during planning]
-```
+Write the result to `<project>/epics/<feature-name>/epic.md`.
 
 ## Create task files
 
@@ -68,49 +42,18 @@ Rules for task breakdown:
 - Maximum 10 tasks per epic. If more are needed, ask the PM to split the spec into two features.
 - Each task must map to a specific section of the spec. Set `spec_section` to the exact section name.
 - Tasks sized L must include a note in the description explaining how to split further.
-- Set `depends_on` as a list of filenames for tasks that must come before (e.g., `[001.md]`).
+- Set `depends_on` as a list of filenames for tasks that must come before (e.g., `[001-task-title.md]`).
 - All tasks start with `status: local`.
 
-Write each task as `<project>/epics/<feature-name>/001.md`, `002.md`, etc. using this format:
+Read `templates/task.md` and use it as the output structure for each task file.
 
-```
----
-title: [Action verb + what]
-type: task
-status: local
-size: [XS|S|M|L]
-created: <today>
-updated: <today>
-depends_on: []
-spec_section: "[Section Name > Subsection]"
-github_url:
-github_id:
----
+Name each task file using a zero-padded sequence number and the task title in kebab-case: `001-task-title.md`, `002-another-task.md`, etc.
 
-# [Task title]
-
-## Description
-[What needs to be done and why. Enough for a dev to start without asking basic questions.]
-
-## Acceptance criteria
-- [ ] [Verifiable criterion]
-- [ ] [Verifiable criterion]
-
-## Notes
-[Edge cases, implementation hints, or design references]
-```
+Write each task to `<project>/epics/<feature-name>/<filename>.md`.
 
 ## Quality check
 
-Before finishing, verify every task has:
-- A title that starts with a verb
-- A non-empty description
-- At least 2 acceptance criteria
-- A `spec_section` set
-- A size set
-- No placeholder text ("TBD", "TODO", etc.)
-
-If any task fails these checks, fix it before finishing.
+Run `/pm:validate` on all task files created. If any fail, fix them before finishing.
 
 ## Summary
 
@@ -120,8 +63,8 @@ After writing all files, print:
 Epic: <feature-name>
 Tasks created: [N]
 
-  001.md  [S]  Task title
-  002.md  [M]  Task title  (depends on: 001)
+  001-task-title.md  [S]  Task title
+  002-another-task.md  [M]  Task title  (depends on: 001-task-title.md)
   ...
 
 Warnings:

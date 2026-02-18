@@ -29,7 +29,7 @@ spec: specs/feature-name.md
 ---
 ```
 
-## Task files (`epics/<feature>/001.md`)
+## Task files (`epics/<feature>/001-task-title.md`)
 
 ```yaml
 ---
@@ -39,7 +39,7 @@ status: local         # local | synced | in-progress | done
 size: S               # XS | S | M | L
 created: 2026-01-01
 updated: 2026-01-01
-depends_on: []        # list of sibling task filenames, e.g. [001.md]
+depends_on: []        # list of sibling task filenames, e.g. [001-task-title.md]
 spec_section: "Main Features > Session Creation"
 github_url:           # filled after /pm:sync
 github_id:            # filled after /pm:sync

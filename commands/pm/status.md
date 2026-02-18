@@ -9,11 +9,11 @@ allowed-tools: Read, Bash
 
 Arguments: $ARGUMENTS
 Expected format:
-- `/pm:status <project>` -- active items only (default)
-- `/pm:status <project> --local` -- unsynced drafts only
-- `/pm:status <project> --delivered` -- items delivered in the last 15 days
-- `/pm:status <project> --all` -- everything
-- `/pm:status` -- active items across all projects
+- `/pm:status <project>`: active items only (default)
+- `/pm:status <project> --local`: unsynced drafts only
+- `/pm:status <project> --delivered`: items delivered in the last 15 days
+- `/pm:status <project> --all`: everything
+- `/pm:status`: active items across all projects
 
 ## Setup
 
@@ -27,30 +27,30 @@ Follow `/rules/frontmatter.md` for reading frontmatter.
 
 For each project in scope:
 
-**Specs** -- read all files in `<project>/specs/`:
+**Specs**: read all files in `<project>/specs/`:
 - Extract: title, status (draft / parsed / synced)
 
-**Epics** -- read all `epic.md` files in `<project>/epics/*/`:
+**Epics**: read all `epic.md` files in `<project>/epics/*/`:
 - Extract: title, status, github_id, task count
 
-**Tasks** -- read all task files in each epic directory (skip epic.md):
+**Tasks**: read all task files in each epic directory (skip epic.md):
 - Extract: title, size, status, github_id, updated
 
-**Tickets** -- read all files in `<project>/tickets/`:
+**Tickets**: read all files in `<project>/tickets/`:
 - Extract: title, type, size, status, github_id, updated
 
 ## Step 2: Apply filter
 
 Filter items based on the flag before fetching PR status (avoids unnecessary GitHub API calls):
 
-**No flag (default -- active only):**
+**No flag (default, active only):**
 - Include: specs with `status: draft` or `parsed`
 - Include: tasks and tickets with `status: local`, `synced`, or `in-progress`
 - Exclude: anything with `status: delivered` or `closed`
 
 **`--local`:**
 - Include only: items with `status: local` (not yet synced to GitHub)
-- Skip GitHub API calls entirely -- no `github_id` to look up
+- Skip GitHub API calls entirely, no `github_id` to look up
 
 **`--delivered`:**
 - Include only: items where PR state is `MERGED` and PR merged within the last 15 days
@@ -112,11 +112,11 @@ Tip: use --delivered to see what shipped in the last 15 days, --all to see every
 **Column order:** issue number, size, title, delivery status, PR info
 
 **Delivery status labels:**
-- `local` -- not synced to GitHub yet
-- `waiting` -- synced, no PR yet
-- `in progress` -- draft PR exists
-- `in review` -- open PR exists
-- `delivered` -- PR merged
+- `local`: not synced to GitHub yet
+- `waiting`: synced, no PR yet
+- `in progress`: draft PR exists
+- `in review`: open PR exists
+- `delivered`: PR merged
 
 Only show the "Tip" line on the default view, not when a flag is explicitly passed.
 

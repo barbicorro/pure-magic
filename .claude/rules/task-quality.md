@@ -7,7 +7,7 @@ Every task and ticket created by pure-magic must meet these standards before it 
 - **Title**: Clear, action-oriented. Starts with a verb. Example: "Add session notes field to coach session view"
 - **Description**: What needs to be done and why. Enough context for a dev to start without asking basic questions.
 - **Acceptance criteria**: A checklist of conditions that define "done" from the user's perspective. At least 2 items. No vague criteria like "it works" or "looks good".
-- **Size**: XS, S, M, or L -- required on every task and ticket
+- **Size**: XS, S, M, or L, required on every task and ticket
 
 ## Required for tasks from `/pm:parse` only
 
@@ -35,9 +35,9 @@ Write as a checklist. Each item must be verifiable:
 ```
 
 Bad examples (do not use):
-- "Feature works correctly" -- not verifiable
-- "UI looks good" -- subjective
-- "Tests pass" -- assumed, not a product criterion
+- "Feature works correctly" (not verifiable)
+- "UI looks good" (subjective)
+- "Tests pass" (assumed, not a product criterion)
 
 ## Quality gates enforced before sync
 

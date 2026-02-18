@@ -9,9 +9,9 @@ allowed-tools: Read, Write, Bash, AskUserQuestion
 
 Arguments: $ARGUMENTS
 Expected format:
-- `/pm:sync <project> <feature-name>` -- sync one epic and its tasks
-- `/pm:sync <project> <ticket-name>` -- sync one standalone ticket
-- `/pm:sync <project> --all` -- sync everything not yet synced
+- `/pm:sync <project> <feature-name>`: sync one epic and its tasks
+- `/pm:sync <project> <ticket-name>`: sync one standalone ticket
+- `/pm:sync <project> --all`: sync everything not yet synced
 
 ## Setup
 
@@ -31,7 +31,7 @@ Depending on the target:
 
 **Single epic** (`feature-name`):
 - Read `<project>/epics/<feature-name>/epic.md`
-- Read all task files: `<project>/epics/<feature-name>/001.md`, `002.md`, etc.
+- Read all task files in `<project>/epics/<feature-name>/` (all .md files except epic.md)
 - Skip any tasks that already have a `github_id` set (already synced)
 
 **Single ticket** (`ticket-name`):
@@ -45,15 +45,7 @@ Depending on the target:
 
 ## Step 2: Quality check
 
-For each file to be synced, verify against `/rules/task-quality.md`:
-- Title starts with a verb (for tasks and tickets)
-- Description is not empty
-- At least 2 acceptance criteria
-- Size is set (not for epics)
-- No placeholder text ("TBD", "TODO", "placeholder")
-- `spec_section` is set for epic tasks
-
-If any file fails: list the failures clearly and stop. Do not create any GitHub issues.
+Run `/pm:validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any GitHub issues.
 "These items have quality issues and cannot be synced. Fix them and try again:"
 
 ## Step 3: Preview
@@ -64,8 +56,8 @@ Show the PM a clear preview of what will be created:
 Ready to sync to [github_repo]:
 
 EPIC: Feature Name
-  #  001.md  [S]  Task title 1
-  #  002.md  [M]  Task title 2  (depends on: 001)
+  #  001-task-title.md  [S]  Task title 1
+  #  002-task-title.md  [M]  Task title 2  (depends on: 001-task-title.md)
 
 TICKETS:
   #  fix-login-redirect.md  [bug, XS]  Fix login redirect
@@ -91,7 +83,7 @@ gh label create "<label>" --repo <github_repo> --color "<color>" --description "
 
 ## Step 5: Create GitHub issues
 
-The body of each GitHub issue is the markdown content of the local file, with the YAML frontmatter stripped. Do not reformat or restructure the content -- the file is already the issue. Skip any section whose body is empty (e.g., an empty `## Notes` section).
+The body of each GitHub issue is the markdown content of the local file, with the YAML frontmatter stripped. Do not reformat or restructure the content. The file is already the issue. Skip any section whose body is empty (e.g., an empty `## Notes` section).
 
 For tasks only, append a footer after the last section:
 ```
@@ -129,7 +121,7 @@ gh issue create \
 ```
 
 After creating each issue:
-- Rename the file: `001.md` -> `<issue-number>.md`
+- Rename the file: `001-task-title.md` -> `<issue-number>-task-title.md`
 - Update frontmatter: `status: synced`, `github_url`, `github_id`, `updated`
 - Update the epic.md task breakdown table with the issue number
 

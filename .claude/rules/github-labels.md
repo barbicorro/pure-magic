@@ -25,7 +25,7 @@ These labels are used when creating issues via `/pm:sync`. Apply them exactly as
 | `size:xs` | A few lines, under 1 hour |
 | `size:s` | Small, under half a day |
 | `size:m` | Medium, 1-2 days |
-| `size:l` | Large -- should be split before starting |
+| `size:l` | Large, should be split before starting |
 
 ## Label creation
 

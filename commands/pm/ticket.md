@@ -21,7 +21,7 @@ Check if `<project>/tickets/<ticket-title>.md` already exists. If it does, ask t
 
 ## Interview
 
-Ask the PM the following. Adapt based on what the title already makes clear -- do not ask redundant questions.
+Ask the PM the following. Adapt based on what the title already makes clear. Do not ask redundant questions.
 
 Use AskUserQuestion to gather:
 
@@ -49,74 +49,19 @@ If the PM confirms M or L and wants to proceed, continue.
 
 Create directory `<project>/tickets/` if it does not exist.
 
-Write to `<project>/tickets/<ticket-title>.md`:
+For bugs: read `templates/ticket-bug.md` and use it as the output structure. Set `type: bug`.
+For improvements: read `templates/ticket.md` and use it as the output structure. Set `type: improvement`.
+For requests: read `templates/ticket.md` and use it as the output structure. Set `type: request`.
 
-For bugs:
-```
----
-title: [Ticket title]
-type: bug
-status: local
-size: [XS|S|M|L]
-created: <today>
-updated: <today>
-github_url:
-github_id:
----
+Follow `/rules/frontmatter.md` for frontmatter format.
 
-# [Ticket title]
-
-## Description
-[What needs to be done and why]
-
-## Steps to reproduce
-1. [Step]
-2. [Step]
-
-## Expected behavior
-[What should happen]
-
-## Actual behavior
-[What actually happens]
-
-## Acceptance criteria
-- [ ] [Criterion]
-- [ ] [Criterion]
-```
-
-For improvements and requests:
-```
----
-title: [Ticket title]
-type: [improvement|request]
-status: local
-size: [XS|S|M|L]
-created: <today>
-updated: <today>
-github_url:
-github_id:
----
-
-# [Ticket title]
-
-## Description
-[What needs to be done and why]
-
-## Acceptance criteria
-- [ ] [Criterion]
-- [ ] [Criterion]
-```
+Fill in all fields from the interview answers and today's date. Write the result to `<project>/tickets/<ticket-title>.md`.
 
 ## Quality check
 
-Verify before saving:
-- Description is not empty
-- At least 2 acceptance criteria
-- Size is set
-- No placeholder text
+Run `/pm:validate` on the ticket file. If it fails, fix the issues before saving.
 
 Follow `/rules/task-quality.md` for standards.
-Follow `/rules/frontmatter.md` for frontmatter format.
 
 ## Finish
 
