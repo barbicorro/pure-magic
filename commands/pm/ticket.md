@@ -49,11 +49,11 @@ If the PM confirms M or L and wants to proceed, continue.
 
 Create directory `<project>/tickets/` if it does not exist.
 
-For bugs: read `templates/ticket-bug.md` and use it as the output structure. Set `type: bug`.
-For improvements: read `templates/ticket.md` and use it as the output structure. Set `type: improvement`.
-For requests: read `templates/ticket.md` and use it as the output structure. Set `type: request`.
+For bugs: read `.claude/overrides/templates/ticket-bug.md` if it exists, otherwise read `.claude/templates/ticket-bug.md`. Use it as the output structure. Set `type: bug`.
+For improvements: read `.claude/overrides/templates/ticket.md` if it exists, otherwise read `.claude/templates/ticket.md`. Use it as the output structure. Set `type: improvement`.
+For requests: read `.claude/overrides/templates/ticket.md` if it exists, otherwise read `.claude/templates/ticket.md`. Use it as the output structure. Set `type: request`.
 
-Follow `/rules/frontmatter.md` for frontmatter format.
+If `.claude/overrides/rules/frontmatter.md` exists, Read and follow it instead of the auto-loaded `/rules/frontmatter.md`.
 
 Fill in all fields from the interview answers and today's date. Write the result to `<project>/tickets/<ticket-title>.md`.
 
@@ -61,7 +61,7 @@ Fill in all fields from the interview answers and today's date. Write the result
 
 Run `/pm:validate` on the ticket file. If it fails, fix the issues before saving.
 
-Follow `/rules/task-quality.md` for standards.
+If `.claude/overrides/rules/task-quality.md` exists, Read and follow it instead of the auto-loaded `/rules/task-quality.md`.
 
 ## Finish
 

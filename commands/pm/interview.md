@@ -41,7 +41,7 @@ If any answers from round 1 are too vague to write good questions from, use a fo
 
 ## Generate draft
 
-Read `templates/interview.md` and use it as the structure for the output.
+Read `.claude/overrides/templates/interview.md` if it exists, otherwise read `.claude/templates/interview.md`. Use it as the structure for the output.
 
 Build the interview guide using the intake answers. Apply Mom Test principles throughout:
 
@@ -80,7 +80,7 @@ Keep iterating with AskUserQuestion until the PM says done.
 
 ## Quality check
 
-Using the standards already loaded from `/rules/interview-quality.md`, check the draft content against all quality gates. Report any issues found, but do not block the save - interview files are advisory only.
+If `.claude/overrides/rules/interview-quality.md` exists, Read and follow it instead of the auto-loaded `/rules/interview-quality.md`. Check the draft content against all quality gates. Report any issues found, but do not block the save - interview files are advisory only.
 
 ## Save
 

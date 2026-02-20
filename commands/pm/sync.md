@@ -21,9 +21,9 @@ Parse $ARGUMENTS to extract `project` and `target`. If either is missing:
 Read `<project>/pm-config.md` (required). Extract `github_repo`. If pm-config.md is not found, stop:
 "No pm-config.md found for <project>. Create one first."
 
-Follow `/rules/frontmatter.md` for reading and updating frontmatter.
-Follow `/rules/github-labels.md` for label names and creation rules.
-Follow `/rules/task-quality.md` for quality gates.
+If `.claude/overrides/rules/frontmatter.md` exists, Read and follow it instead of the auto-loaded `/rules/frontmatter.md`.
+If `.claude/overrides/rules/github-labels.md` exists, Read and follow it instead of the auto-loaded `/rules/github-labels.md`.
+If `.claude/overrides/rules/task-quality.md` exists, Read and follow it instead of the auto-loaded `/rules/task-quality.md`.
 
 ## Step 1: Collect what will be synced
 
@@ -91,7 +91,7 @@ Use AskUserQuestion to get confirmation. If the PM says no, stop cleanly.
 
 ## Step 5: Ensure labels exist
 
-For each label in `/rules/github-labels.md`, check if it exists in the repo:
+For each label defined in the labels rule loaded in setup, check if it exists in the repo:
 ```bash
 gh label list --repo <github_repo> --json name
 ```

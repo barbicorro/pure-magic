@@ -18,60 +18,37 @@ if [ ! -d "$TARGET" ]; then
   exit 1
 fi
 
-# Create .claude directories
-mkdir -p "$TARGET/.claude/commands/pm"
-mkdir -p "$TARGET/.claude/rules"
+# Copy a directory, removing symlinks first if migrating from old install
+copy_dir() {
+  local src="$1"
+  local dest="$2"
+  local label="$3"
 
-# Copy commands
-echo "Installing commands..."
-for file in "$SCRIPT_DIR/commands/pm/"*.md; do
-  filename=$(basename "$file")
-  dest="$TARGET/.claude/commands/pm/$filename"
-  if [ -f "$dest" ]; then
-    read -p "  $filename already exists. Overwrite? [y/N] " answer
-    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
-      echo "  Skipped $filename"
-      continue
-    fi
+  if [ -L "$dest" ]; then
+    rm "$dest"
+    echo "  removed old symlink: $label"
   fi
-  cp "$file" "$dest"
-  echo "  + commands/pm/$filename"
-done
 
-# Copy rules
-echo "Installing rules..."
-for file in "$SCRIPT_DIR/.claude/rules/"*.md; do
-  filename=$(basename "$file")
-  dest="$TARGET/.claude/rules/$filename"
-  if [ -f "$dest" ]; then
-    read -p "  $filename already exists. Overwrite? [y/N] " answer
-    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
-      echo "  Skipped $filename"
-      continue
-    fi
-  fi
-  cp "$file" "$dest"
-  echo "  + rules/$filename"
-done
+  mkdir -p "$dest"
+  cp "$src/"*.md "$dest/" 2>/dev/null || true
+  echo "  copied: $label"
+}
 
-# Copy templates
-echo "Installing templates..."
-mkdir -p "$TARGET/.claude/templates"
-for file in "$SCRIPT_DIR/templates/"*.md; do
-  filename=$(basename "$file")
-  dest="$TARGET/.claude/templates/$filename"
-  if [ -f "$dest" ]; then
-    read -p "  $filename already exists. Overwrite? [y/N] " answer
-    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
-      echo "  Skipped $filename"
-      continue
-    fi
-  fi
-  cp "$file" "$dest"
-  echo "  + templates/$filename"
-done
+# Copy all managed directories
+echo "Installing files..."
+copy_dir "$SCRIPT_DIR/commands/pm" "$TARGET/.claude/commands/pm" "commands/pm"
+copy_dir "$SCRIPT_DIR/.claude/rules" "$TARGET/.claude/rules" "rules"
+copy_dir "$SCRIPT_DIR/templates" "$TARGET/.claude/templates" "templates"
 
-# Update settings.local.json with gh permissions
+# Create override directories
+echo ""
+echo "Creating override directories..."
+mkdir -p "$TARGET/.claude/overrides/rules"
+mkdir -p "$TARGET/.claude/overrides/templates"
+echo "  .claude/overrides/rules/     (place custom rules here)"
+echo "  .claude/overrides/templates/ (place custom templates here)"
+
+# Create settings.local.json with gh permissions
 SETTINGS="$TARGET/.claude/settings.local.json"
 if [ ! -f "$SETTINGS" ]; then
   cat > "$SETTINGS" << 'EOF'
@@ -83,6 +60,7 @@ if [ ! -f "$SETTINGS" ]; then
   }
 }
 EOF
+  echo ""
   echo "Created .claude/settings.local.json with gh permissions"
 else
   echo ""
@@ -91,8 +69,33 @@ else
   echo "This is required for /pm:sync and /pm:status to work."
 fi
 
+# Write manifest
+VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null | tr -d '[:space:]')
+INSTALLED=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+MANIFEST="$TARGET/.claude/.pure-magic.json"
+
+cat > "$MANIFEST" << EOF
+{
+  "version": "$VERSION",
+  "source": "$SCRIPT_DIR",
+  "installed": "$INSTALLED"
+}
+EOF
 echo ""
-echo "Done. pure-magic is installed at $TARGET/.claude/"
+echo "Wrote manifest: .claude/.pure-magic.json (version $VERSION)"
+
+echo ""
+echo "Done. pure-magic $VERSION is installed at $TARGET/.claude/"
+echo ""
+echo "To update pure-magic in this workspace later:"
+echo "  bash \"$SCRIPT_DIR/update.sh\" \"$TARGET\""
+echo ""
+echo "To customize rules or templates for this project only:"
+echo "  Copy a file into the overrides directory and edit it there."
+echo "  Commands use the override when present, the default otherwise."
+echo ""
+echo "  .claude/overrides/rules/<name>.md     overrides .claude/rules/<name>.md"
+echo "  .claude/overrides/templates/<name>.md overrides .claude/templates/<name>.md"
 echo ""
 echo "Next steps:"
 echo "  1. For each project, create a pm-config.md in its folder:"

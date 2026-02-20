@@ -53,7 +53,7 @@ Keep interviewing until you have enough to write a thorough spec. Use multiple r
 
 Create the directory `<project>/specs/` if it does not exist.
 
-Read `templates/spec.md` and use it as the output structure. Fill in all sections from the interview answers and today's date.
+Read `.claude/overrides/templates/spec.md` if it exists, otherwise read `.claude/templates/spec.md`. Use it as the output structure. Fill in all sections from the interview answers and today's date.
 
 Write the result to `<project>/specs/<feature-name>.md`.
 

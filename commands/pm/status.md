@@ -21,7 +21,7 @@ Parse $ARGUMENTS to extract `project` (optional) and `flag` (optional: `--local`
 
 If a project name is given, scan only that project. If none, scan all projects (any directory in the vault that contains a `pm-config.md`).
 
-Follow `/rules/frontmatter.md` for reading frontmatter.
+If `.claude/overrides/rules/frontmatter.md` exists, Read and follow it instead of the auto-loaded `/rules/frontmatter.md`.
 
 ## Step 1: Collect local state
 

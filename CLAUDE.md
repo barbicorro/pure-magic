@@ -14,7 +14,7 @@ The system has three parts:
 - `.claude/rules/` - Shared standards. Commands reference these inline (e.g., `Follow /rules/task-quality.md`). Claude loads them from the `.claude/` context hierarchy automatically.
 - `templates/` - The single source of truth for file structure. Commands read these templates and use them as output structure rather than defining structure inline. Do not duplicate structure inside commands.
 
-`install.sh` copies all three into a target PM workspace's `.claude/` directory so Claude Code picks them up.
+`install.sh` copies all three into a target PM workspace's `.claude/` directory. It writes a `.claude/.pure-magic.json` manifest containing the installed version, source path, and timestamp. `update.sh` reads that manifest, diffs managed files against the source repo, and applies changes after confirmation. Overrides and `settings.local.json` are never touched by either script.
 
 ### Commands
 
@@ -41,6 +41,15 @@ The system has three parts:
 | `templates/pm-config.md` | Project config |
 | `templates/interview.md` | Customer interview guides |
 
+### Overrides
+
+PMs can customize rules or templates per project without losing updates. Place a modified file in:
+
+- `.claude/overrides/rules/<name>.md` - overrides `.claude/rules/<name>.md`
+- `.claude/overrides/templates/<name>.md` - overrides `.claude/templates/<name>.md`
+
+Commands check the override path first. If the file exists, they Read and follow it instead of the copied default. Override directories are created empty by `install.sh` and are never touched by `update.sh`. The source repo does not track them.
+
 ## Key conventions
 
 - All state lives in YAML frontmatter. The schemas are defined in `.claude/rules/frontmatter.md`.
@@ -48,6 +57,7 @@ The system has three parts:
 - Every task must have a `spec_section` field linking it to the spec it came from.
 - `github_url` and `github_id` are always blank until `/pm:sync` runs and fills them in.
 - When modifying a command, do not change the allowed tools list without also verifying the command logic uses only those tools.
+- Override files in `.claude/overrides/` are per-project and should not be committed to the pure-magic source repo.
 
 ## Task filename convention
 
