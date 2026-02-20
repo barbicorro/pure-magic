@@ -8,7 +8,7 @@ allowed-tools: Read
 # /pm:validate
 
 Arguments: $ARGUMENTS
-Expected format: one or more file paths to validate (e.g., `acme/epics/onboarding/001-build-wizard.md`)
+Expected format: one or more file paths to validate (e.g., `acme/tasks/onboarding/001-build-wizard.md`)
 
 ## Setup
 
@@ -22,7 +22,7 @@ Read `/rules/task-quality.md`, `/rules/frontmatter.md`, and `/rules/interview-qu
 For each file path provided:
 
 1. Read the file.
-2. Determine its type from the `type` field in frontmatter (`task`, `ticket`, `epic`, `spec`, `interview`).
+2. Determine its type from the `type` field in frontmatter (`task`, `ticket`, `spec`, `interview`).
 3. Run all applicable quality gates listed below.
 
 ### Quality gates (interview files)
@@ -53,7 +53,7 @@ Interview validation failures are reported as warnings. They do not block sync (
 ### Frontmatter completeness
 
 - All required fields for the file type must be present (per `/rules/frontmatter.md`).
-- For `task`, `ticket`, and `epic` files only: `github_url` and `github_id` must be blank (empty value, not missing key). Interview and spec files do not have these fields.
+- For `task` and `ticket` files only: `github_url` and `github_id` must be blank (empty value, not missing key). Interview and spec files do not have these fields.
 - Dates must be in ISO 8601 format: YYYY-MM-DD.
 
 ## Output
@@ -69,7 +69,7 @@ If any file fails, list each failure clearly:
 ```
 Validation failed:
 
-acme/epics/onboarding/001-build-wizard.md
+acme/tasks/onboarding/001-build-wizard.md
   - Title does not start with a verb: "Onboarding wizard setup"
   - Missing acceptance criteria (found 1, need at least 2)
 

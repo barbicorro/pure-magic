@@ -1,5 +1,5 @@
 ---
-description: Create a standalone ticket (bug, improvement, or request) without an epic
+description: Create a standalone ticket (bug, improvement, or request)
 argument-hint: <project> <ticket-title>
 model: opus
 allowed-tools: Read, Write, AskUserQuestion

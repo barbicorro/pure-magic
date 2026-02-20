@@ -5,7 +5,6 @@ team:
   pm: Your Name
   devs: []
 labels:
-  epic: "epic"
   task: "task"
   bug: "bug"
   improvement: "improvement"

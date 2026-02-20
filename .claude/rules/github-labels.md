@@ -6,8 +6,7 @@ These labels are used when creating issues via `/pm:sync`. Apply them exactly as
 
 | Label | When to use |
 |---|---|
-| `epic` | Parent issue grouping a set of tasks |
-| `task` | Individual task within an epic |
+| `task` | Individual task from a spec |
 | `bug` | Something is broken |
 | `improvement` | An existing feature being enhanced |
 | `request` | A new small feature or client ask |
@@ -39,4 +38,3 @@ On first `/pm:sync` for a project, check if these labels exist in the repo. If a
 
 - Always apply exactly one type label
 - Always apply exactly one size label
-- For epics: apply `epic` label only, no size label

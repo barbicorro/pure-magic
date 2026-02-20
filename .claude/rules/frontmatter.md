@@ -14,22 +14,7 @@ updated: 2026-01-01
 ---
 ```
 
-## Epic files (`epics/<feature>/epic.md`)
-
-```yaml
----
-title: Feature Name
-type: epic
-status: local         # local | synced
-created: 2026-01-01
-updated: 2026-01-01
-github_url:           # filled after /pm:sync
-github_id:            # filled after /pm:sync
-spec: specs/feature-name.md
----
-```
-
-## Task files (`epics/<feature>/001-task-title.md`)
+## Task files (`tasks/<feature>/001-task-title.md`)
 
 ```yaml
 ---

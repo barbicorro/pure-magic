@@ -1,5 +1,5 @@
 ---
-description: Convert a spec into an epic and task breakdown (local, for review before syncing)
+description: Convert a spec into a task breakdown (local, for review before syncing)
 argument-hint: <project> <feature-name>
 model: opus
 allowed-tools: Read, Write, AskUserQuestion
@@ -21,17 +21,11 @@ Read these files:
 
 If the spec does not exist, tell the PM: "No spec found at <project>/specs/<feature-name>.md. Run /pm:spec <project> <feature-name> first."
 
-Check if `<project>/epics/<feature-name>/` already exists. If it does, ask the PM if she wants to regenerate it before continuing.
-
-## Create the epic
-
-Create directory `<project>/epics/<feature-name>/`.
-
-Read `templates/epic.md` and use it as the output structure. Fill in all fields from the spec and today's date.
-
-Write the result to `<project>/epics/<feature-name>/epic.md`.
+Check if `<project>/tasks/<feature-name>/` already exists. If it does, ask the PM if she wants to regenerate it before continuing.
 
 ## Create task files
+
+Create directory `<project>/tasks/<feature-name>/`.
 
 Read the spec carefully. Break it into individual tasks. Each task should represent one clear unit of work a dev can pick up independently.
 
@@ -39,7 +33,7 @@ Follow `/rules/task-quality.md` for all quality standards.
 Follow `/rules/frontmatter.md` for frontmatter format.
 
 Rules for task breakdown:
-- Maximum 10 tasks per epic. If more are needed, ask the PM to split the spec into two features.
+- Maximum 10 tasks per feature. If more are needed, ask the PM to split the spec into two features.
 - Each task must map to a specific section of the spec. Set `spec_section` to the exact section name.
 - Tasks sized L must include a note in the description explaining how to split further.
 - Set `depends_on` as a list of filenames for tasks that must come before (e.g., `[001-task-title.md]`).
@@ -49,7 +43,7 @@ Read `templates/task.md` and use it as the output structure for each task file.
 
 Name each task file using a zero-padded sequence number and the task title in kebab-case: `001-task-title.md`, `002-another-task.md`, etc.
 
-Write each task to `<project>/epics/<feature-name>/<filename>.md`.
+Write each task to `<project>/tasks/<feature-name>/<filename>.md`.
 
 ## Quality check
 
@@ -60,7 +54,6 @@ Run `/pm:validate` on all task files created. If any fail, fix them before finis
 After writing all files, print:
 
 ```
-Epic: <feature-name>
 Tasks created: [N]
 
   001-task-title.md  [S]  Task title

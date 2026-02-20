@@ -21,7 +21,7 @@ The system has three parts:
 | Command | Purpose |
 |---|---|
 | `/pm:spec` | Interview + write a spec |
-| `/pm:parse` | Convert spec to epic + tasks |
+| `/pm:parse` | Convert spec to tasks |
 | `/pm:ticket` | Create a standalone ticket |
 | `/pm:interview` | Co-create a customer interview guide (Mom Test) |
 | `/pm:sync` | Push to GitHub Issues |
@@ -35,7 +35,6 @@ The system has three parts:
 | File | Used for |
 |---|---|
 | `templates/spec.md` | Spec documents |
-| `templates/epic.md` | Epic files |
 | `templates/task.md` | Task files |
 | `templates/ticket.md` | Improvement and request tickets |
 | `templates/ticket-bug.md` | Bug tickets |
@@ -52,18 +51,18 @@ The system has three parts:
 
 ## Task filename convention
 
-Task files use a zero-padded sequence number followed by the task title in kebab-case:
+Task files live in `tasks/<feature>/` and use a zero-padded sequence number followed by the task title in kebab-case:
 
 ```
-001-build-onboarding-wizard.md
-002-add-skip-option.md
+tasks/onboarding/001-build-onboarding-wizard.md
+tasks/onboarding/002-add-skip-option.md
 ```
 
 After `/pm:sync` creates the GitHub issue, the file is renamed using the issue number as prefix:
 
 ```
-44-build-onboarding-wizard.md
-45-add-skip-option.md
+tasks/onboarding/44-build-onboarding-wizard.md
+tasks/onboarding/45-add-skip-option.md
 ```
 
 The `depends_on` field in frontmatter references sibling task filenames (e.g., `[001-build-onboarding-wizard.md]`).

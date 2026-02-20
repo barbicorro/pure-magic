@@ -44,7 +44,7 @@ Bad examples (do not use):
 1. Description is not empty and not placeholder text
 2. Acceptance criteria has at least 2 items
 3. Size is set
-4. `spec_section` is set (for epic tasks)
+4. `spec_section` is set (for tasks created by /pm:parse)
 5. Title starts with a verb
 6. No field contains "TBD", "TODO", or "placeholder"
 

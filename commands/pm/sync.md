@@ -1,5 +1,5 @@
 ---
-description: Push local specs/epics/tickets to GitHub Issues after review
+description: Push local tasks and tickets to GitHub Issues
 argument-hint: <project> <feature-name|ticket-name|--all>
 model: opus
 allowed-tools: Read, Write, Bash, AskUserQuestion
@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Bash, AskUserQuestion
 
 Arguments: $ARGUMENTS
 Expected format:
-- `/pm:sync <project> <feature-name>`: sync one epic and its tasks
+- `/pm:sync <project> <feature-name>`: sync one feature's tasks
 - `/pm:sync <project> <ticket-name>`: sync one standalone ticket
 - `/pm:sync <project> --all`: sync everything not yet synced
 
@@ -29,9 +29,8 @@ Follow `/rules/task-quality.md` for quality gates.
 
 Depending on the target:
 
-**Single epic** (`feature-name`):
-- Read `<project>/epics/<feature-name>/epic.md`
-- Read all task files in `<project>/epics/<feature-name>/` (all .md files except epic.md)
+**Single feature** (`feature-name`):
+- Read all task files in `<project>/tasks/<feature-name>/` (all .md files)
 - Skip any tasks that already have a `github_id` set (already synced)
 
 **Single ticket** (`ticket-name`):
@@ -39,7 +38,7 @@ Depending on the target:
 - If it already has a `github_id`, stop: "This ticket is already synced at <github_url>"
 
 **All** (`--all`):
-- Scan `<project>/epics/` for any epic.md with `status: local`
+- Scan `<project>/tasks/` for any task file with `status: local`
 - Scan `<project>/tickets/` for any ticket with `status: local`
 - Collect all of them
 
@@ -48,28 +47,49 @@ Depending on the target:
 Run `/pm:validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any GitHub issues.
 "These items have quality issues and cannot be synced. Fix them and try again:"
 
-## Step 3: Preview
+## Step 3: Milestone
+
+Fetch existing milestones from the repo:
+```bash
+gh api repos/<owner>/<repo>/milestones --jq '.[].title'
+```
+
+Use AskUserQuestion to ask: "Assign a milestone to all items in this sync?" with options:
+- Each existing milestone by name
+- "Create new milestone"
+- "No milestone"
+
+If "Create new milestone": ask for the name and optional due date, then create it:
+```bash
+gh api repos/<owner>/<repo>/milestones -f title="<name>" -f due_on="<date>"
+```
+If no due date, omit the `-f due_on` flag.
+
+Store the chosen milestone name for use in Step 6. If "No milestone", skip adding `--milestone` to issue creation commands.
+
+## Step 4: Preview
 
 Show the PM a clear preview of what will be created:
 
 ```
 Ready to sync to [github_repo]:
 
-EPIC: Feature Name
+feature-name:
   #  001-task-title.md  [S]  Task title 1
   #  002-task-title.md  [M]  Task title 2  (depends on: 001-task-title.md)
 
 TICKETS:
   #  fix-login-redirect.md  [bug, XS]  Fix login redirect
 
-Total: 1 epic, 2 tasks, 1 ticket = 4 GitHub issues
+Milestone: <chosen milestone or "none">
+Total: 2 tasks, 1 ticket = 3 GitHub issues
 
 Proceed? (yes/no)
 ```
 
 Use AskUserQuestion to get confirmation. If the PM says no, stop cleanly.
 
-## Step 4: Ensure labels exist
+## Step 5: Ensure labels exist
 
 For each label in `/rules/github-labels.md`, check if it exists in the repo:
 ```bash
@@ -81,32 +101,15 @@ Create any missing labels:
 gh label create "<label>" --repo <github_repo> --color "<color>" --description "<desc>"
 ```
 
-## Step 5: Create GitHub issues
+## Step 6: Create GitHub issues
 
 The body of each GitHub issue is the markdown content of the local file, with the YAML frontmatter stripped. Do not reformat or restructure the content. The file is already the issue. Skip any section whose body is empty (e.g., an empty `## Notes` section).
 
 For tasks only, append a footer after the last section:
 ```
 ---
-_Part of epic: #<epic-issue-number>_
 _Spec section: <spec_section value>_
 ```
-
-### For epics
-
-```bash
-gh issue create \
-  --repo <github_repo> \
-  --title "<title from epic.md frontmatter>" \
-  --body "<epic.md content with frontmatter stripped>" \
-  --label "epic"
-```
-
-Capture the issue number and URL. Update `epic.md` frontmatter:
-- `status: synced`
-- `github_url: <url>`
-- `github_id: <number>`
-- `updated: <today>`
 
 ### For tasks
 
@@ -117,13 +120,13 @@ gh issue create \
   --repo <github_repo> \
   --title "<title from task frontmatter>" \
   --body "<task file content with frontmatter stripped + footer>" \
-  --label "task,<size-label>"
+  --label "task,<size-label>" \
+  --milestone "<milestone name>"   # omit if no milestone chosen
 ```
 
 After creating each issue:
 - Rename the file: `001-task-title.md` -> `<issue-number>-task-title.md`
 - Update frontmatter: `status: synced`, `github_url`, `github_id`, `updated`
-- Update the epic.md task breakdown table with the issue number
 
 If any issue creation fails: report it clearly but continue with the rest. At the end, list what succeeded and what failed.
 
@@ -134,24 +137,24 @@ gh issue create \
   --repo <github_repo> \
   --title "<title from ticket frontmatter>" \
   --body "<ticket file content with frontmatter stripped>" \
-  --label "<type>,<size-label>"
+  --label "<type>,<size-label>" \
+  --milestone "<milestone name>"   # omit if no milestone chosen
 ```
 
 Update ticket frontmatter: `status: synced`, `github_url`, `github_id`, `updated`.
 
-## Step 6: Summary
+## Step 7: Summary
 
 Print a summary of what was created:
 
 ```
 Synced to [github_repo]:
 
-  Epic #42:   Feature Name        -> <url>
   Task  #43:  Task title 1   [S]  -> <url>
   Task  #44:  Task title 2   [M]  -> <url>
   Bug   #45:  Fix login redirect  -> <url>
 
-4 issues created.
+3 issues created.
 ```
 
 If there were failures, list them at the end.

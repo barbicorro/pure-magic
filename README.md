@@ -37,7 +37,7 @@ Edit the frontmatter to set your `github_repo`, team, and preferences.
 | Command | What it does |
 |---|---|
 | `/pm:spec <project> <feature>` | Interview + write a spec |
-| `/pm:parse <project> <feature>` | Convert spec to epic + tasks |
+| `/pm:parse <project> <feature>` | Break a spec into tasks |
 | `/pm:ticket <project> <title>` | Create a standalone ticket |
 | `/pm:sync <project> <target>` | Push to GitHub Issues |
 | `/pm:status [project]` | Dashboard with PR delivery status |
@@ -54,7 +54,7 @@ your-workspace/
     CLAUDE.md        # your product context (you write this)
     pm-config.md     # project config (github repo, team, labels)
     specs/           # spec documents
-    epics/           # epic + task breakdowns
+    tasks/           # task breakdowns
     tickets/         # standalone tickets
 ```
 

@@ -30,11 +30,9 @@ For each project in scope:
 **Specs**: read all files in `<project>/specs/`:
 - Extract: title, status (draft / parsed / synced)
 
-**Epics**: read all `epic.md` files in `<project>/epics/*/`:
-- Extract: title, status, github_id, task count
-
-**Tasks**: read all task files in each epic directory (skip epic.md):
+**Tasks**: read all task files in `<project>/tasks/*/`:
 - Extract: title, size, status, github_id, updated
+- Group by feature folder name
 
 **Tickets**: read all files in `<project>/tickets/`:
 - Extract: title, type, size, status, github_id, updated
@@ -93,7 +91,7 @@ SPECS
   draft    session-notes
   parsed   user-onboarding
 
-EPICS & TASKS
+TASKS
   user-onboarding  (3 tasks)
     #44  [M]  Build onboarding wizard   in review   PR #71 open
     #45  [S]  Add skip option           waiting     no PR
@@ -123,7 +121,7 @@ Only show the "Tip" line on the default view, not when a flag is explicitly pass
 ## Needs attention rules
 
 Flag these automatically:
-- Specs with `status: draft` that have not been parsed (no epic exists for them)
+- Specs with `status: draft` that have not been parsed (no `tasks/<feature>/` directory exists for them)
 - Tasks or tickets with missing acceptance criteria (check the file)
 - Tickets sized L (should probably be a spec)
 - Local items (not synced) older than 7 days
