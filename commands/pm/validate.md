@@ -15,15 +15,28 @@ Expected format: one or more file paths to validate (e.g., `acme/epics/onboardin
 Parse $ARGUMENTS as a list of file paths. If no arguments are given, stop:
 "Usage: /pm:validate <file-path> [file-path ...]"
 
-Read `/rules/task-quality.md` and `/rules/frontmatter.md` to load the current standards.
+Read `/rules/task-quality.md`, `/rules/frontmatter.md`, and `/rules/interview-quality.md` to load the current standards.
 
 ## Validate each file
 
 For each file path provided:
 
 1. Read the file.
-2. Determine its type from the `type` field in frontmatter (`task`, `ticket`, `epic`, `spec`).
+2. Determine its type from the `type` field in frontmatter (`task`, `ticket`, `epic`, `spec`, `interview`).
 3. Run all applicable quality gates listed below.
+
+### Quality gates (interview files)
+
+Apply the standards from `/rules/interview-quality.md` (already loaded in setup). Summary of gates:
+
+- **Goal set**: The `goal` frontmatter field must be non-empty and not placeholder text.
+- **Customer segment set**: The `customer_segment` field must be non-empty and not placeholder text.
+- **Minimum questions**: At least 5 core questions must appear in the `## Core questions` section.
+- **Intention on every question**: Every question block must include an `**Intention:**` field.
+- **No anti-patterns**: Flag questions matching Mom Test anti-patterns (future hypotheticals, leading questions, pitching). These are warnings, not hard failures.
+- **No placeholder text**: No field or section may contain "TBD", "TODO", or "placeholder" (case-insensitive).
+
+Interview validation failures are reported as warnings. They do not block sync (interviews are not synced to GitHub).
 
 ### Quality gates (tasks and tickets)
 
@@ -40,7 +53,7 @@ For each file path provided:
 ### Frontmatter completeness
 
 - All required fields for the file type must be present (per `/rules/frontmatter.md`).
-- `github_url` and `github_id` must be blank (empty value, not missing key) for local files.
+- For `task`, `ticket`, and `epic` files only: `github_url` and `github_id` must be blank (empty value, not missing key). Interview and spec files do not have these fields.
 - Dates must be in ISO 8601 format: YYYY-MM-DD.
 
 ## Output

@@ -28,7 +28,10 @@ Interview the PM using the AskUserQuestion tool. Do two things at once: gather w
 
 Cover the following (adapt based on what is already known):
 - Who are the users involved and what are their goals?
-- What does success look like? How will we know this worked?
+- What does success look like? Specifically:
+  - What decisions can the user not make today that this feature should unlock?
+  - What does a concrete win look like 3 months after launch?
+  - Is the core problem lack of visibility, scattered data, or inability to act on what they already see?
 - What must the feature do? What are the core requirements?
 - How does a user move through this? What is the flow?
 - Any design decisions or Figma references already made?

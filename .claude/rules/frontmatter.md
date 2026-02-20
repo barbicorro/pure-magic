@@ -61,6 +61,21 @@ github_id:            # filled after /pm:sync
 ---
 ```
 
+## Interview files (`interviews/`)
+
+```yaml
+---
+title: Interview Title
+type: interview
+goal: ""
+customer_segment: ""
+status: draft         # draft | complete
+created: 2026-01-01
+updated: 2026-01-01
+spec: ""              # path to linked spec, or blank
+---
+```
+
 ## Rules
 
 - Dates are always ISO 8601 format: `YYYY-MM-DD`

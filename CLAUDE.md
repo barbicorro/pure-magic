@@ -23,6 +23,7 @@ The system has three parts:
 | `/pm:spec` | Interview + write a spec |
 | `/pm:parse` | Convert spec to epic + tasks |
 | `/pm:ticket` | Create a standalone ticket |
+| `/pm:interview` | Co-create a customer interview guide (Mom Test) |
 | `/pm:sync` | Push to GitHub Issues |
 | `/pm:status` | Dashboard with PR delivery status |
 | `/pm:validate` | Validate files against quality and frontmatter standards |
@@ -39,6 +40,7 @@ The system has three parts:
 | `templates/ticket.md` | Improvement and request tickets |
 | `templates/ticket-bug.md` | Bug tickets |
 | `templates/pm-config.md` | Project config |
+| `templates/interview.md` | Customer interview guides |
 
 ## Key conventions
 

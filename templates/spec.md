@@ -15,9 +15,19 @@ updated: YYYY-MM-DD
 What problem is being solved and why it matters to the user or the business.
 
 ## Goals
-- Desired outcome 1
-- Desired outcome 2
-- Success looks like: [measurable definition]
+Each goal describes what the product enables the user to do or understand, not what the product does technically. Write from the product's perspective: "Surface X so the user can Y." A goal is not a feature restated, and not a business KPI.
+
+Format: **Verb phrase describing what the product does for the user** - one sentence explaining how it helps.
+
+Bad examples (do not write goals like these):
+- "Increase revenue by 20%" -- business goal, not a product goal
+- "Show revenue split by location" -- that is a feature, not a goal
+- "Give users a dashboard" -- too vague, describes UI not outcome
+
+Good example:
+- "Surface which locations drive the most revenue, so the user can decide where to invest"
+
+Self-check after writing: re-read each goal and ask "Could this be a line item under Main Features?" If yes, rewrite it.
 
 ## User Roles / Target Audience
 - **Role name**: How they are affected by this feature
