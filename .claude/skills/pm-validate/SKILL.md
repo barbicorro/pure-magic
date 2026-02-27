@@ -1,11 +1,12 @@
 ---
+name: pm-validate
 description: Validate one or more PM files against quality and frontmatter standards
 argument-hint: <file-path> [file-path ...]
 model: opus
 allowed-tools: Read
 ---
 
-# /pm:validate
+# /pm-validate
 
 Arguments: $ARGUMENTS
 Expected format: one or more file paths to validate (e.g., `acme/tasks/onboarding/001-build-wizard.md`)
@@ -13,7 +14,7 @@ Expected format: one or more file paths to validate (e.g., `acme/tasks/onboardin
 ## Setup
 
 Parse $ARGUMENTS as a list of file paths. If no arguments are given, stop:
-"Usage: /pm:validate <file-path> [file-path ...]"
+"Usage: /pm-validate <file-path> [file-path ...]"
 
 For each rule, check for a project override first:
 - If `.claude/overrides/rules/task-quality.md` exists, Read it; otherwise the auto-loaded `/rules/task-quality.md` is already in context.
@@ -85,4 +86,4 @@ acme/tickets/export-csv.md
 [N] file(s) checked. [M] passed, [K] failed.
 ```
 
-Stop after reporting. Do not attempt to fix files automatically unless the calling command explicitly asks you to fix them.
+Stop after reporting. Do not attempt to fix files automatically unless the calling skill explicitly asks you to fix them.

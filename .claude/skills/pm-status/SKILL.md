@@ -1,19 +1,21 @@
 ---
+name: pm-status
 description: Show PM dashboard for one or all projects, including PR delivery status
 argument-hint: [project]
 model: opus
 allowed-tools: Read, Bash
+disable-model-invocation: true
 ---
 
-# /pm:status
+# /pm-status
 
 Arguments: $ARGUMENTS
 Expected format:
-- `/pm:status <project>`: active items only (default)
-- `/pm:status <project> --local`: unsynced drafts only
-- `/pm:status <project> --delivered`: items delivered in the last 15 days
-- `/pm:status <project> --all`: everything
-- `/pm:status`: active items across all projects
+- `/pm-status <project>`: active items only (default)
+- `/pm-status <project> --local`: unsynced drafts only
+- `/pm-status <project> --delivered`: items delivered in the last 15 days
+- `/pm-status <project> --all`: everything
+- `/pm-status`: active items across all projects
 
 ## Setup
 
@@ -101,7 +103,7 @@ TICKETS
   bug  #51  [XS]  Mobile nav overlap     waiting     no PR
 
 NEEDS ATTENTION
-  - Spec "session-notes" has not been parsed yet. Run /pm:parse acme session-notes
+  - Spec "session-notes" has not been parsed yet. Run /pm-parse acme session-notes
   - Task #44 has no acceptance criteria
 
 Tip: use --delivered to see what shipped in the last 15 days, --all to see everything.

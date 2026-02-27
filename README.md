@@ -4,12 +4,12 @@ Spec-driven project management for Claude Code. Write specs with AI, generate Gi
 
 ## How it works
 
-1. **Write a spec** with AI as partner (`/pm:spec`)
-2. **Break it into tasks** with quality gates enforced (`/pm:parse`)
-3. **Create standalone tickets** for bugs and small requests (`/pm:ticket`)
+1. **Write a spec** with AI as partner (`/pm-spec`)
+2. **Break it into tasks** with quality gates enforced (`/pm-parse`)
+3. **Create standalone tickets** for bugs and small requests (`/pm-ticket`)
 4. **Review locally** before anything goes to GitHub
-5. **Sync to GitHub Issues** with one command (`/pm:sync`)
-6. **Track delivery** including PR status (`/pm:status`)
+5. **Sync to GitHub Issues** with one command (`/pm-sync`)
+6. **Track delivery** including PR status (`/pm-status`)
 
 Then the dev team picks up the GitHub Issue, plans with Claude Code (optional), implements, opens a PR. Everything connects through GitHub Issues, no shared files needed.
 
@@ -20,7 +20,7 @@ git clone https://github.com/barbicorro/pure-magic
 bash pure-magic/install.sh /path/to/your/pm-workspace
 ```
 
-The installer copies `commands/pm/`, `rules/`, and `templates/` into `.claude/` in your target directory. A `.pure-magic.json` manifest is written so the workspace knows where it came from and which version is installed.
+The installer copies `skills/pm-*/`, `rules/`, and `templates/` into `.claude/` in your target directory. A `.pure-magic.json` manifest is written so the workspace knows where it came from and which version is installed.
 
 ## Updating
 
@@ -42,24 +42,31 @@ cp .claude/templates/pm-config.md <your-project>/pm-config.md
 
 Edit the frontmatter to set your `github_repo`, team, and preferences.
 
-## Commands
+## Skills
 
-| Command | What it does |
+| Skill | What it does |
 |---|---|
-| `/pm:spec <project> <feature>` | Interview + write a spec |
-| `/pm:parse <project> <feature>` | Break a spec into tasks |
-| `/pm:ticket <project> <title>` | Create a standalone ticket |
-| `/pm:interview <project> <segment>` | Create a customer interview guide |
-| `/pm:sync <project> <target>` | Push to GitHub Issues |
-| `/pm:status [project]` | Dashboard with PR delivery status |
-| `/pm:validate <file>` | Validate a file against quality standards |
+| `/pm-spec <project> <feature>` | Interview + write a spec |
+| `/pm-parse <project> <feature>` | Break a spec into tasks |
+| `/pm-ticket <project> <title>` | Create a standalone ticket |
+| `/pm-interview <project> <segment>` | Create a customer interview guide |
+| `/pm-sync <project> <target>` | Push to GitHub Issues |
+| `/pm-status [project]` | Dashboard with PR delivery status |
+| `/pm-validate <file>` | Validate a file against quality standards |
 
 ## File structure
 
 ```
 your-workspace/
   .claude/
-    commands/pm/        # copied from pure-magic/commands/pm/
+    skills/
+      pm-spec/          # copied from pure-magic/.claude/skills/pm-spec/
+      pm-parse/
+      pm-ticket/
+      pm-interview/
+      pm-sync/
+      pm-status/
+      pm-validate/
     rules/              # copied from pure-magic/.claude/rules/
     templates/          # copied from pure-magic/templates/
     overrides/
@@ -83,7 +90,7 @@ No code changes needed. Everything is markdown.
 
 ## Overriding rules and templates per project
 
-Files in `commands/pm/`, `rules/`, and `templates/` are copies. If you edit them directly, your changes will be overwritten the next time you run `update.sh`. To customize for one project without losing updates, use the overrides directories instead.
+Files in `skills/pm-*/`, `rules/`, and `templates/` are copies. If you edit them directly, your changes will be overwritten the next time you run `update.sh`. To customize for one project without losing updates, use the overrides directories instead.
 
 Copy any rule or template file into the overrides directory and edit it there:
 
@@ -95,7 +102,7 @@ cp .claude/rules/task-quality.md .claude/overrides/rules/task-quality.md
 cp .claude/templates/task.md .claude/overrides/templates/task.md
 ```
 
-Commands check `.claude/overrides/` first. If an override file exists, it is used instead of the copied default. Delete the override file to go back to the default.
+Skills check `.claude/overrides/` first. If an override file exists, it is used instead of the copied default. Delete the override file to go back to the default.
 
 The overrides directories (`.claude/overrides/rules/` and `.claude/overrides/templates/`) are created empty by the installer and are never touched by `update.sh`.
 

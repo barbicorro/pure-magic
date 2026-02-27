@@ -1,6 +1,6 @@
 # GitHub Labels
 
-These labels are used when creating issues via `/pm:sync`. Apply them exactly as listed.
+These labels are used when creating issues via `/pm-sync`. Apply them exactly as listed.
 
 ## Type labels (always apply one)
 
@@ -28,7 +28,7 @@ These labels are used when creating issues via `/pm:sync`. Apply them exactly as
 
 ## Label creation
 
-On first `/pm:sync` for a project, check if these labels exist in the repo. If any are missing, create them with `gh label create`. Use these colors:
+On first `/pm-sync` for a project, check if these labels exist in the repo. If any are missing, create them with `gh label create`. Use these colors:
 
 - Type labels: `#0075ca` (blue)
 - `in-progress`: `#d93f0b` (orange)

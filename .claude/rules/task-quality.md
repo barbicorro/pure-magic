@@ -1,6 +1,6 @@
 # Task Quality Standards
 
-Every task and ticket created by pure-magic must meet these standards before it can be synced to GitHub. These are enforced by `/pm:parse` and `/pm:sync`.
+Every task and ticket created by pure-magic must meet these standards before it can be synced to GitHub. These are enforced by `/pm-parse` and `/pm-sync`.
 
 ## Required fields (all tasks and tickets)
 
@@ -9,7 +9,7 @@ Every task and ticket created by pure-magic must meet these standards before it 
 - **Acceptance criteria**: A checklist of conditions that define "done" from the user's perspective. At least 2 items. No vague criteria like "it works" or "looks good".
 - **Size**: XS, S, M, or L, required on every task and ticket
 
-## Required for tasks from `/pm:parse` only
+## Required for tasks from `/pm-parse` only
 
 - **`spec_section`**: The section of the spec this task came from. This is the traceability link. If a task cannot be traced back to a spec section, it should not exist.
 
@@ -44,7 +44,7 @@ Bad examples (do not use):
 1. Description is not empty and not placeholder text
 2. Acceptance criteria has at least 2 items
 3. Size is set
-4. `spec_section` is set (for tasks created by /pm:parse)
+4. `spec_section` is set (for tasks created by /pm-parse)
 5. Title starts with a verb
 6. No field contains "TBD", "TODO", or "placeholder"
 

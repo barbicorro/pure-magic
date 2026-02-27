@@ -69,9 +69,18 @@ check_dir() {
   done
 }
 
-check_dir "$SCRIPT_DIR/commands/pm" "$TARGET/.claude/commands/pm" "commands/pm"
+for skill_src in "$SCRIPT_DIR/.claude/skills"/pm-*/; do
+  skill_name=$(basename "$skill_src")
+  check_dir "$skill_src" "$TARGET/.claude/skills/$skill_name" "skills/$skill_name"
+done
 check_dir "$SCRIPT_DIR/.claude/rules" "$TARGET/.claude/rules" "rules"
 check_dir "$SCRIPT_DIR/templates" "$TARGET/.claude/templates" "templates"
+
+# Migration notice: old commands/pm/ still present in target
+if [ -d "$TARGET/.claude/commands/pm" ] && [ ! -d "$TARGET/.claude/skills" ]; then
+  echo ""
+  echo "Note: Commands moved to skills. Old files in .claude/commands/pm/ can be removed."
+fi
 
 TOTAL=$(( ${#CHANGED[@]} + ${#NEW[@]} + ${#REMOVED[@]} ))
 
@@ -120,7 +129,13 @@ copy_dir() {
   echo "  updated: $label"
 }
 
-copy_dir "$SCRIPT_DIR/commands/pm" "$TARGET/.claude/commands/pm" "commands/pm"
+for skill_src in "$SCRIPT_DIR/.claude/skills"/pm-*/; do
+  skill_name=$(basename "$skill_src")
+  skill_dest="$TARGET/.claude/skills/$skill_name"
+  mkdir -p "$skill_dest"
+  cp "$skill_src/SKILL.md" "$skill_dest/SKILL.md"
+  echo "  updated: skills/$skill_name"
+done
 copy_dir "$SCRIPT_DIR/.claude/rules" "$TARGET/.claude/rules" "rules"
 copy_dir "$SCRIPT_DIR/templates" "$TARGET/.claude/templates" "templates"
 

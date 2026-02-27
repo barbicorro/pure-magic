@@ -1,11 +1,13 @@
 ---
+name: pm-ticket
 description: Create a standalone ticket (bug, improvement, or request)
 argument-hint: <project> <ticket-title>
 model: opus
 allowed-tools: Read, Write, AskUserQuestion
+disable-model-invocation: true
 ---
 
-# /pm:ticket
+# /pm-ticket
 
 Arguments: $ARGUMENTS
 Expected format: `<project> <ticket-title>` (e.g., `acme fix-login-redirect`)
@@ -13,7 +15,7 @@ Expected format: `<project> <ticket-title>` (e.g., `acme fix-login-redirect`)
 ## Setup
 
 Parse $ARGUMENTS to extract `project` and `ticket-title`. Convert ticket-title to kebab-case if needed. If either is missing, stop and tell the user:
-"Usage: /pm:ticket <project> <ticket-title>"
+"Usage: /pm-ticket <project> <ticket-title>"
 
 Read `<project>/pm-config.md` if it exists (for project context).
 
@@ -42,7 +44,7 @@ Use AskUserQuestion to gather:
    - M: medium, 1-2 days
    - L: large, more than 2 days
 
-If size is M or L, ask: "This seems larger than a standalone ticket. Would you like to create a spec instead with `/pm:spec <project> <feature-name>`?"
+If size is M or L, ask: "This seems larger than a standalone ticket. Would you like to create a spec instead with `/pm-spec <project> <feature-name>`?"
 If the PM confirms M or L and wants to proceed, continue.
 
 ## Write the ticket
@@ -59,7 +61,7 @@ Fill in all fields from the interview answers and today's date. Write the result
 
 ## Quality check
 
-Run `/pm:validate` on the ticket file. If it fails, fix the issues before saving.
+Run `/pm-validate` on the ticket file. If it fails, fix the issues before saving.
 
 If `.claude/overrides/rules/task-quality.md` exists, Read and follow it instead of the auto-loaded `/rules/task-quality.md`.
 
@@ -67,4 +69,4 @@ If `.claude/overrides/rules/task-quality.md` exists, Read and follow it instead 
 
 After writing, tell the PM:
 - File saved at: `<project>/tickets/<ticket-title>.md`
-- Next step: `/pm:sync <project> <ticket-title>` to push to GitHub Issues
+- Next step: `/pm-sync <project> <ticket-title>` to push to GitHub Issues

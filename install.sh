@@ -36,7 +36,13 @@ copy_dir() {
 
 # Copy all managed directories
 echo "Installing files..."
-copy_dir "$SCRIPT_DIR/commands/pm" "$TARGET/.claude/commands/pm" "commands/pm"
+for skill_src in "$SCRIPT_DIR/.claude/skills"/pm-*/; do
+  skill_name=$(basename "$skill_src")
+  skill_dest="$TARGET/.claude/skills/$skill_name"
+  mkdir -p "$skill_dest"
+  cp "$skill_src/SKILL.md" "$skill_dest/SKILL.md"
+  echo "  copied: skills/$skill_name"
+done
 copy_dir "$SCRIPT_DIR/.claude/rules" "$TARGET/.claude/rules" "rules"
 copy_dir "$SCRIPT_DIR/templates" "$TARGET/.claude/templates" "templates"
 
@@ -66,7 +72,7 @@ else
   echo ""
   echo "Note: .claude/settings.local.json already exists."
   echo "Make sure it allows: Bash(gh:*)"
-  echo "This is required for /pm:sync and /pm:status to work."
+  echo "This is required for /pm-sync and /pm-status to work."
 fi
 
 # Write manifest
@@ -92,7 +98,7 @@ echo "  bash \"$SCRIPT_DIR/update.sh\" \"$TARGET\""
 echo ""
 echo "To customize rules or templates for this project only:"
 echo "  Copy a file into the overrides directory and edit it there."
-echo "  Commands use the override when present, the default otherwise."
+echo "  Skills use the override when present, the default otherwise."
 echo ""
 echo "  .claude/overrides/rules/<name>.md     overrides .claude/rules/<name>.md"
 echo "  .claude/overrides/templates/<name>.md overrides .claude/templates/<name>.md"
@@ -105,4 +111,4 @@ echo "  2. Make sure GitHub CLI is authenticated:"
 echo "     gh auth status"
 echo ""
 echo "  3. Start with your first spec:"
-echo "     /pm:spec <project> <feature-name>"
+echo "     /pm-spec <project> <feature-name>"

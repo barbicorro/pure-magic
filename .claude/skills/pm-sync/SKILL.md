@@ -1,22 +1,24 @@
 ---
+name: pm-sync
 description: Push local tasks and tickets to GitHub Issues
 argument-hint: <project> <feature-name|ticket-name|--all>
 model: opus
 allowed-tools: Read, Write, Bash, AskUserQuestion
+disable-model-invocation: true
 ---
 
-# /pm:sync
+# /pm-sync
 
 Arguments: $ARGUMENTS
 Expected format:
-- `/pm:sync <project> <feature-name>`: sync one feature's tasks
-- `/pm:sync <project> <ticket-name>`: sync one standalone ticket
-- `/pm:sync <project> --all`: sync everything not yet synced
+- `/pm-sync <project> <feature-name>`: sync one feature's tasks
+- `/pm-sync <project> <ticket-name>`: sync one standalone ticket
+- `/pm-sync <project> --all`: sync everything not yet synced
 
 ## Setup
 
 Parse $ARGUMENTS to extract `project` and `target`. If either is missing:
-"Usage: /pm:sync <project> <feature-name|ticket-name|--all>"
+"Usage: /pm-sync <project> <feature-name|ticket-name|--all>"
 
 Read `<project>/pm-config.md` (required). Extract `github_repo`. If pm-config.md is not found, stop:
 "No pm-config.md found for <project>. Create one first."
@@ -44,7 +46,7 @@ Depending on the target:
 
 ## Step 2: Quality check
 
-Run `/pm:validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any GitHub issues.
+Run `/pm-validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any GitHub issues.
 "These items have quality issues and cannot be synced. Fix them and try again:"
 
 ## Step 3: Milestone

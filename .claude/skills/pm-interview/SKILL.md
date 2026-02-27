@@ -1,11 +1,13 @@
 ---
+name: pm-interview
 description: Co-create a customer interview guide using Mom Test principles
 argument-hint: <project> <interview-name>
 model: opus
 allowed-tools: Read, Write, AskUserQuestion
+disable-model-invocation: true
 ---
 
-# /pm:interview
+# /pm-interview
 
 Arguments: $ARGUMENTS
 Expected format: `<project> <interview-name>` (e.g., `acme discovery-coaches`)
@@ -13,7 +15,7 @@ Expected format: `<project> <interview-name>` (e.g., `acme discovery-coaches`)
 ## Setup
 
 Parse $ARGUMENTS to extract `project` and `interview-name`. If either is missing, stop and tell the user:
-"Usage: /pm:interview <project> <interview-name>"
+"Usage: /pm-interview <project> <interview-name>"
 
 Read the following for context (if they exist):
 - `<project>/CLAUDE.md`: product context, users, and goals
@@ -94,6 +96,6 @@ Tell the PM:
 - File saved at: `<project>/interviews/<interview-name>.md`
 - Any quality warnings (if none, confirm it passed)
 - Next step:
-  - If a spec was linked: "After running your interviews, update the spec with new findings: `/pm:spec <project> <feature-name>`"
-  - If no spec was linked and this is discovery: "After running a few interviews, create a spec from what you learned: `/pm:spec <project> <feature-name>`"
-  - If no spec was linked and this is post-launch: "After running your interviews, create a ticket for any follow-up work: `/pm:ticket <project> <ticket-title>`"
+  - If a spec was linked: "After running your interviews, update the spec with new findings: `/pm-spec <project> <feature-name>`"
+  - If no spec was linked and this is discovery: "After running a few interviews, create a spec from what you learned: `/pm-spec <project> <feature-name>`"
+  - If no spec was linked and this is post-launch: "After running your interviews, create a ticket for any follow-up work: `/pm-ticket <project> <ticket-title>`"

@@ -1,11 +1,13 @@
 ---
+name: pm-spec
 description: Interview about a feature, then write a structured spec
 argument-hint: <project> <feature-name>
 model: opus
 allowed-tools: Read, Write, AskUserQuestion
+disable-model-invocation: true
 ---
 
-# /pm:spec
+# /pm-spec
 
 Arguments: $ARGUMENTS
 Expected format: `<project> <feature-name>` (e.g., `acme session-notes`)
@@ -13,7 +15,7 @@ Expected format: `<project> <feature-name>` (e.g., `acme session-notes`)
 ## Setup
 
 Parse $ARGUMENTS to extract `project` and `feature-name`. If either is missing, stop and tell the user:
-"Usage: /pm:spec <project> <feature-name>"
+"Usage: /pm-spec <project> <feature-name>"
 
 Read the following for context (if they exist):
 - `<project>/CLAUDE.md`: product context, users, tech stack
@@ -60,4 +62,4 @@ Write the result to `<project>/specs/<feature-name>.md`.
 After writing, tell the PM:
 - The file path where the spec was saved
 - How many open questions remain
-- Next step: `/pm:parse <project> <feature-name>` to break it into tasks
+- Next step: `/pm-parse <project> <feature-name>` to break it into tasks
