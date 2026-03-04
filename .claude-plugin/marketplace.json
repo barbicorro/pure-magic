@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "pm",
-      "source": "..",
+      "source": { "source": "github", "repo": "barbicorro/pure-magic" },
       "description": "Spec-driven PM system for Claude Code. Write specs, parse tasks, sync to GitHub.",
       "version": "0.3.0",
       "author": {
