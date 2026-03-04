@@ -8,13 +8,14 @@ pure-magic is a spec-driven PM system that runs entirely inside Claude Code. The
 
 ## Architecture
 
-The system has three parts:
+The system has four parts:
 
 - `.claude/skills/pm-*/` - Claude skill definitions. Each skill is a directory with a `SKILL.md` file containing a markdown prompt with YAML frontmatter declaring its name, model, allowed tools, and invocation settings.
+- `.claude/agents/` - Subagent definitions. Each file has YAML frontmatter (name, description, tools, model) and a markdown body that serves as the system prompt. Skills launch subagents by name via the Task tool.
 - `.claude/rules/` - Shared standards. Skills reference these inline (e.g., `Follow /rules/task-quality.md`). Claude loads them from the `.claude/` context hierarchy automatically.
 - `templates/` - The single source of truth for file structure. Skills read these templates and use them as output structure rather than defining structure inline. Do not duplicate structure inside skills.
 
-`install.sh` copies all three into a target PM workspace's `.claude/` directory. It writes a `.claude/.pure-magic.json` manifest containing the installed version, source path, and timestamp. `update.sh` reads that manifest, diffs managed files against the source repo, and applies changes after confirmation. Overrides and `settings.local.json` are never touched by either script.
+`install.sh` copies all four into a target PM workspace's `.claude/` directory. It writes a `.claude/.pure-magic.json` manifest containing the installed version, source path, and timestamp. `update.sh` reads that manifest, diffs managed files against the source repo, and applies changes after confirmation. Overrides and `settings.local.json` are never touched by either script.
 
 ### Skills
 
@@ -29,6 +30,14 @@ The system has three parts:
 | `/pm-validate` | Validate files against quality and frontmatter standards |
 
 `/pm-validate` is called by other skills before syncing and after file creation. A PM can also run it directly to check files at any time.
+
+### Agents
+
+| File | Launched by | Model | Purpose |
+|---|---|---|---|
+| `.claude/agents/spec-reviewer.md` | `/pm-spec` | sonnet | Review a spec for clarity, completeness, consistency, and readiness |
+
+Agents are subagent definitions with their own system prompt, tool restrictions, and model config. They run in isolated subprocesses with no access to the calling skill's conversation. Skills launch them by name and pass task-specific details in the prompt parameter.
 
 ### Templates
 

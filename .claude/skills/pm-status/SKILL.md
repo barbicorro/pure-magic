@@ -2,7 +2,7 @@
 name: pm-status
 description: Show PM dashboard for one or all projects, including PR delivery status
 argument-hint: [project]
-model: opus
+model: sonnet
 allowed-tools: Read, Bash
 disable-model-invocation: true
 ---

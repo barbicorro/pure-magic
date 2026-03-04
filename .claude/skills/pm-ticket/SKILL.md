@@ -2,7 +2,7 @@
 name: pm-ticket
 description: Create a standalone ticket (bug, improvement, or request)
 argument-hint: <project> <ticket-title>
-model: opus
+model: sonnet
 allowed-tools: Read, Write, AskUserQuestion
 disable-model-invocation: true
 ---
@@ -38,13 +38,19 @@ Use AskUserQuestion to gather:
 
 4. **Acceptance criteria**: What does "done" look like? Ask for at least 2 verifiable conditions.
 
-5. **Size**: How big is this?
+5. **Computed values**: If the ticket involves any computed value (sum, average, count, subtraction, percentage, ratio, score, or similar), ask: "What is the exact formula? Include what is computed, the inputs, the denominator if any, and any scope or filters."
+
+6. **Charts**: If the ticket involves a chart or visualisation, ask for the full visual spec: chart type, X-axis labels and format, Y-axis unit and starting point, any overlay or comparison behaviour, tooltip fields, and legend.
+
+7. **Definitions**: If the ticket depends on a defined term (e.g., "active user", "completed session"), ask: what is included, what is excluded, are the categories mutually exclusive, and what are the edge cases?
+
+8. **Size**: How big is this?
    - XS: a few lines, under 1 hour
    - S: small, under half a day
    - M: medium, 1-2 days
    - L: large, more than 2 days
 
-If size is M or L, ask: "This seems larger than a standalone ticket. Would you like to create a spec instead with `/pm-spec <project> <feature-name>`?"
+If the size answer is M or L, ask: "This seems larger than a standalone ticket. Would you like to create a spec instead with `/pm-spec <project> <feature-name>`?"
 If the PM confirms M or L and wants to proceed, continue.
 
 ## Write the ticket

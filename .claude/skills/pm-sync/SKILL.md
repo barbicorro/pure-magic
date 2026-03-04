@@ -2,7 +2,7 @@
 name: pm-sync
 description: Push local tasks and tickets to GitHub Issues
 argument-hint: <project> <feature-name|ticket-name|--all>
-model: opus
+model: sonnet
 allowed-tools: Read, Write, Bash, AskUserQuestion
 disable-model-invocation: true
 ---

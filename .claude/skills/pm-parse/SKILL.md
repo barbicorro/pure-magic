@@ -2,7 +2,7 @@
 name: pm-parse
 description: Convert a spec into a task breakdown (local, for review before syncing)
 argument-hint: <project> <feature-name>
-model: opus
+model: sonnet
 allowed-tools: Read, Write, AskUserQuestion
 disable-model-invocation: true
 ---
@@ -25,6 +25,14 @@ If the spec does not exist, tell the PM: "No spec found at <project>/specs/<feat
 
 Check if `<project>/tasks/<feature-name>/` already exists. If it does, ask the PM if she wants to regenerate it before continuing.
 
+## Pre-write checks
+
+Before writing any task file, read the full spec and apply these checks:
+
+**Goal mapping**: For each feature in the spec, check if it maps to a stated goal in the Problem Statement section. If a feature has no clear goal link, add a note in the task description and ask the PM to confirm it belongs in scope before writing that task.
+
+**Duplicate data**: For each metric, total, score, or computed value in the spec, check if the same value already exists elsewhere in the product (as described in the spec or `<project>/pm-config.md`). If it does, flag it and ask the PM to confirm it is intentional before writing the task.
+
 ## Create task files
 
 Create directory `<project>/tasks/<feature-name>/`.
@@ -40,6 +48,10 @@ Rules for task breakdown:
 - Tasks sized L must include a note in the description explaining how to split further.
 - Set `depends_on` as a list of filenames for tasks that must come before (e.g., `[001-task-title.md]`).
 - All tasks start with `status: local`.
+- If a spec section describes any computed value (sum, average, count, subtraction, percentage, ratio, score, or similar), the task must include the explicit formula: what is computed, the inputs used, the denominator if any, and the scope or filters applied. If the spec does not provide this, ask the PM before writing the task.
+- If a spec section describes a chart or visualisation, the task must include a full visual spec: chart type, X-axis labels and format, Y-axis unit and starting point, any overlay or comparison behaviour, tooltip fields, and legend. If the spec only says "a chart showing X" without this detail, ask the PM before writing the task.
+- If two features in the same spec section have different open questions, or one may be cut while the other proceeds, give them separate tasks.
+- If a task depends on a definition (e.g., "active user", "completed session", "at-risk client"), the task must cover: what is included in that definition, what is excluded, whether the categories are mutually exclusive, and the relevant edge cases.
 
 Read `.claude/overrides/templates/task.md` if it exists, otherwise read `.claude/templates/task.md`. Use it as the output structure for each task file.
 

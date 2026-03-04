@@ -3,7 +3,7 @@ name: pm-spec
 description: Interview about a feature, then write a structured spec
 argument-hint: <project> <feature-name>
 model: opus
-allowed-tools: Read, Write, AskUserQuestion
+allowed-tools: Read, Write, AskUserQuestion, Task
 disable-model-invocation: true
 ---
 
@@ -59,7 +59,24 @@ Read `.claude/overrides/templates/spec.md` if it exists, otherwise read `.claude
 
 Write the result to `<project>/specs/<feature-name>.md`.
 
-After writing, tell the PM:
+## Review
+
+After writing the spec, launch the spec-reviewer subagent:
+
+```
+Task(
+  description: "Review spec",
+  subagent_type: "spec-reviewer",
+  prompt: "Review the spec at <project>/specs/<feature-name>.md. The feature name is <feature-name>."
+)
+```
+
+Replace `<project>` and `<feature-name>` with the actual values. The subagent handles everything else: it reads the template, runs the checklist, and returns a structured report.
+
+Wait for the agent to return its report before continuing.
+
+Present the review report to the PM, then tell her:
 - The file path where the spec was saved
 - How many open questions remain
-- Next step: `/pm-parse <project> <feature-name>` to break it into tasks
+- If the verdict is "Needs revision": suggest fixing the flagged items before parsing
+- If the verdict is "Ready for /pm-parse": next step is `/pm-parse <project> <feature-name>`
