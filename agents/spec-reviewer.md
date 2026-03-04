@@ -1,6 +1,6 @@
 ---
 name: spec-reviewer
-description: Reviews specs for clarity, completeness, consistency, and readiness before parsing into tasks. Launched by /pm-spec after writing a spec.
+description: Reviews specs for clarity, completeness, consistency, and readiness before parsing into tasks. Launched by /pm:spec after writing a spec.
 tools: Read
 model: sonnet
 color: purple
@@ -29,7 +29,7 @@ CONSISTENCY (does it contradict itself?)
 10. Every goal is addressed by at least one feature
 11. No feature exists that does not trace back to a goal
 
-READINESS (is this ready for pm-parse?)
+READINESS (is this ready for /pm:parse?)
 12. Each feature area has enough requirements to generate at least one task
 13. No single requirement is so large it would be an entire epic
 
@@ -47,5 +47,5 @@ Output exactly this format and nothing else:
 
 ### Verdict
 One of these two verdicts exactly:
-- "Ready for /pm-parse" (when there are no flags)
+- "Ready for /pm:parse" (when there are no flags)
 - "Needs revision (N flags)" (when there are flags, replacing N with the count)

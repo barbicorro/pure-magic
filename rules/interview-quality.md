@@ -1,6 +1,6 @@
 # Interview Quality Standards
 
-Every interview guide created by `/pm-interview` must meet these standards. These gates are enforced by `/pm-validate`.
+Every interview guide created by `/pm:interview` must meet these standards. These gates are enforced by `/pm:validate`.
 
 ## Required fields (frontmatter)
 
@@ -36,7 +36,7 @@ Flag any question that matches these patterns - they violate Mom Test principles
 
 Flag these but do not auto-replace them. Report them as warnings and ask the PM to revise.
 
-## Quality gates enforced by /pm-validate
+## Quality gates enforced by /pm:validate
 
 1. `goal` is not empty or placeholder text
 2. `customer_segment` is not empty or placeholder text

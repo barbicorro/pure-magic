@@ -1,5 +1,5 @@
 ---
-name: pm-parse
+name: parse
 description: Convert a spec into a task breakdown (local, for review before syncing)
 argument-hint: <project> <feature-name>
 model: sonnet
@@ -7,7 +7,7 @@ allowed-tools: Read, Write, AskUserQuestion
 disable-model-invocation: true
 ---
 
-# /pm-parse
+# /pm:parse
 
 Arguments: $ARGUMENTS
 Expected format: `<project> <feature-name>` (e.g., `acme session-notes`)
@@ -15,13 +15,13 @@ Expected format: `<project> <feature-name>` (e.g., `acme session-notes`)
 ## Setup
 
 Parse $ARGUMENTS to extract `project` and `feature-name`. If either is missing, stop and tell the user:
-"Usage: /pm-parse <project> <feature-name>"
+"Usage: /pm:parse <project> <feature-name>"
 
 Read these files:
 - `<project>/specs/<feature-name>.md`: the spec to parse (required; stop if not found)
 - `<project>/CLAUDE.md`: product and technical context
 
-If the spec does not exist, tell the PM: "No spec found at <project>/specs/<feature-name>.md. Run /pm-spec <project> <feature-name> first."
+If the spec does not exist, tell the PM: "No spec found at <project>/specs/<feature-name>.md. Run /pm:spec <project> <feature-name> first."
 
 Check if `<project>/tasks/<feature-name>/` already exists. If it does, ask the PM if she wants to regenerate it before continuing.
 
@@ -61,7 +61,7 @@ Write each task to `<project>/tasks/<feature-name>/<filename>.md`.
 
 ## Quality check
 
-Run `/pm-validate` on all task files created. If any fail, fix them before finishing.
+Run `/pm:validate` on all task files created. If any fail, fix them before finishing.
 
 ## Summary
 
@@ -77,5 +77,5 @@ Tasks created: [N]
 Warnings:
   [Any L-sized tasks, missing acceptance criteria, etc.]
 
-Next step: /pm-sync <project> <feature-name>
+Next step: /pm:sync <project> <feature-name>
 ```

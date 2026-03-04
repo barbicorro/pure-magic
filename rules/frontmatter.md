@@ -26,8 +26,8 @@ created: 2026-01-01
 updated: 2026-01-01
 depends_on: []        # list of sibling task filenames, e.g. [001-task-title.md]
 spec_section: "Main Features > Session Creation"
-github_url:           # filled after /pm-sync
-github_id:            # filled after /pm-sync
+github_url:           # filled after /pm:sync
+github_id:            # filled after /pm:sync
 ---
 ```
 
@@ -41,8 +41,8 @@ status: local         # local | synced
 size: S               # XS | S | M | L
 created: 2026-01-01
 updated: 2026-01-01
-github_url:           # filled after /pm-sync
-github_id:            # filled after /pm-sync
+github_url:           # filled after /pm:sync
+github_id:            # filled after /pm:sync
 ---
 ```
 
@@ -65,7 +65,7 @@ spec: ""              # path to linked spec, or blank
 
 - Dates are always ISO 8601 format: `YYYY-MM-DD`
 - `updated` must be set to today's date any time a file is modified
-- `github_url` and `github_id` are left blank until `/pm-sync` runs
+- `github_url` and `github_id` are left blank until `/pm:sync` runs
 - `status` values are lowercase, use the exact values listed above
 - `size` values are uppercase: XS, S, M, L
 - Never use placeholder text like "TBD" or "TODO" in frontmatter
