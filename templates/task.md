@@ -7,6 +7,7 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 depends_on: []
 spec_section: "Main Features > Section Name"
+priority:
 github_url:
 github_id:
 ---

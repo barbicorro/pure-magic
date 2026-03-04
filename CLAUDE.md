@@ -60,29 +60,10 @@ PMs can customize rules or templates per project without losing updates. Place a
 
 Skills check the override path first. If the file exists, they Read and follow it instead of the copied default. Override directories are created empty by the SessionStart hook and are never touched by it on subsequent runs. The source repo does not track them.
 
-## Key conventions
+## Conventions for modifying this repo
 
-- All state lives in YAML frontmatter. The schemas are defined in `rules/frontmatter.md`.
-- Quality gates in `rules/task-quality.md` block `/pm:sync` if not met. They are not advisory.
-- Every task must have a `spec_section` field linking it to the spec it came from.
-- `github_url` and `github_id` are always blank until `/pm:sync` runs and fills them in.
-- When modifying a skill, do not change the allowed tools list without also verifying the skill logic uses only those tools.
-- Override files in `.claude/overrides/` are per-project and should not be committed to the pure-magic source repo.
-
-## Task filename convention
-
-Task files live in `tasks/<feature>/` and use a zero-padded sequence number followed by the task title in kebab-case:
-
-```
-tasks/onboarding/001-build-onboarding-wizard.md
-tasks/onboarding/002-add-skip-option.md
-```
-
-After `/pm:sync` creates the GitHub issue, the file is renamed using the issue number as prefix:
-
-```
-tasks/onboarding/44-build-onboarding-wizard.md
-tasks/onboarding/45-add-skip-option.md
-```
-
-The `depends_on` field in frontmatter references sibling task filenames (e.g., `[001-build-onboarding-wizard.md]`).
+- Frontmatter schemas live in `rules/frontmatter.md`. Do not duplicate field definitions inside skills.
+- Quality gate logic lives in `rules/task-quality.md`. Do not duplicate gate rules inside skills.
+- Templates are the single source of truth for file structure. Skills read them; they do not define structure inline.
+- When modifying a skill, do not change the allowed tools list without verifying the skill logic only uses those tools.
+- Override files in `.claude/overrides/` are per-project and must not be committed to this repo.

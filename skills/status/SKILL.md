@@ -33,11 +33,11 @@ For each project in scope:
 - Extract: title, status (draft / parsed / synced)
 
 **Tasks**: read all task files in `<project>/tasks/*/`:
-- Extract: title, size, status, github_id, updated
+- Extract: title, size, priority, status, github_id, updated
 - Group by feature folder name
 
 **Tickets**: read all files in `<project>/tickets/`:
-- Extract: title, type, size, status, github_id, updated
+- Extract: title, type, size, priority, status, github_id, updated
 
 ## Step 2: Apply filter
 
@@ -95,8 +95,8 @@ SPECS
 
 TASKS
   user-onboarding  (3 tasks)
-    #44  [M]  Build onboarding wizard   in review   PR #71 open
-    #45  [S]  Add skip option           waiting     no PR
+    build-onboarding-wizard  #44  [M] [P2]  Build onboarding wizard   in review   PR #71 open
+    add-skip-option          #45  [S]       Add skip option           waiting     no PR
 
 TICKETS
   req  #39  [S]   Export CSV button      in review   PR #70 open
@@ -104,12 +104,12 @@ TICKETS
 
 NEEDS ATTENTION
   - Spec "session-notes" has not been parsed yet. Run /pm:parse acme session-notes
-  - Task #44 has no acceptance criteria
+  - Task build-onboarding-wizard has no acceptance criteria
 
 Tip: use --delivered to see what shipped in the last 15 days, --all to see everything.
 ```
 
-**Column order:** issue number, size, title, delivery status, PR info
+**Column order:** slug, issue number, size, priority (omit if blank), title, delivery status, PR info
 
 **Delivery status labels:**
 - `local`: not synced to GitHub yet

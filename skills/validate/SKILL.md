@@ -9,7 +9,7 @@ allowed-tools: Read
 # /pm:validate
 
 Arguments: $ARGUMENTS
-Expected format: one or more file paths to validate (e.g., `acme/tasks/onboarding/001-build-wizard.md`)
+Expected format: one or more file paths to validate (e.g., `acme/tasks/onboarding/build-wizard.md`)
 
 ## Setup
 
@@ -56,6 +56,10 @@ Interview validation failures are reported as warnings. They do not block sync (
 
 - **spec_section set**: The `spec_section` field must be present and non-empty. This is the traceability link to the spec.
 
+### Shared gate (tasks and tickets)
+
+- **Priority value**: If the `priority` field is present and non-empty, it must be one of: P1, P2, P3, P4. Any other value (e.g., "high", "critical", "1") fails this gate.
+
 ### Frontmatter completeness
 
 - All required fields for the file type must be present (per the frontmatter rule loaded in setup).
@@ -75,7 +79,7 @@ If any file fails, list each failure clearly:
 ```
 Validation failed:
 
-acme/tasks/onboarding/001-build-wizard.md
+acme/tasks/onboarding/build-wizard.md
   - Title does not start with a verb: "Onboarding wizard setup"
   - Missing acceptance criteria (found 1, need at least 2)
 

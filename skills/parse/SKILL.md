@@ -46,7 +46,7 @@ Rules for task breakdown:
 - Maximum 10 tasks per feature. If more are needed, ask the PM to split the spec into two features.
 - Each task must map to a specific section of the spec. Set `spec_section` to the exact section name.
 - Tasks sized L must include a note in the description explaining how to split further.
-- Set `depends_on` as a list of filenames for tasks that must come before (e.g., `[001-task-title.md]`).
+- Set `depends_on` as a list of filenames for tasks that must come before (e.g., `[build-onboarding-wizard.md]`).
 - All tasks start with `status: local`.
 - If a spec section describes any computed value (sum, average, count, subtraction, percentage, ratio, score, or similar), the task must include the explicit formula: what is computed, the inputs used, the denominator if any, and the scope or filters applied. If the spec does not provide this, ask the PM before writing the task.
 - If a spec section describes a chart or visualisation, the task must include a full visual spec: chart type, X-axis labels and format, Y-axis unit and starting point, any overlay or comparison behaviour, tooltip fields, and legend. If the spec only says "a chart showing X" without this detail, ask the PM before writing the task.
@@ -55,7 +55,7 @@ Rules for task breakdown:
 
 Read `.claude/overrides/templates/task.md` if it exists, otherwise read `.claude/templates/task.md`. Use it as the output structure for each task file.
 
-Name each task file using a zero-padded sequence number and the task title in kebab-case: `001-task-title.md`, `002-another-task.md`, etc.
+Name each task file using the task title in kebab-case: `task-title.md`, `another-task.md`, etc. No sequence prefix.
 
 Write each task to `<project>/tasks/<feature-name>/<filename>.md`.
 
@@ -70,8 +70,8 @@ After writing all files, print:
 ```
 Tasks created: [N]
 
-  001-task-title.md  [S]  Task title
-  002-another-task.md  [M]  Task title  (depends on: 001-task-title.md)
+  task-title.md  [S]  Task title
+  another-task.md  [M]  Task title  (depends on: task-title.md)
   ...
 
 Warnings:

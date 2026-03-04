@@ -14,7 +14,7 @@ updated: 2026-01-01
 ---
 ```
 
-## Task files (`tasks/<feature>/001-task-title.md`)
+## Task files (`tasks/<feature>/task-title.md`)
 
 ```yaml
 ---
@@ -24,8 +24,9 @@ status: local         # local | synced | in-progress | done
 size: S               # XS | S | M | L
 created: 2026-01-01
 updated: 2026-01-01
-depends_on: []        # list of sibling task filenames, e.g. [001-task-title.md]
+depends_on: []        # list of sibling task filenames, e.g. [build-onboarding-wizard.md]
 spec_section: "Main Features > Session Creation"
+priority:             # optional: P1 | P2 | P3 | P4 — used to set GitHub project priority field
 github_url:           # filled after /pm:sync
 github_id:            # filled after /pm:sync
 ---
@@ -41,6 +42,7 @@ status: local         # local | synced
 size: S               # XS | S | M | L
 created: 2026-01-01
 updated: 2026-01-01
+priority:             # optional: P1 | P2 | P3 | P4 — used to set GitHub project priority field
 github_url:           # filled after /pm:sync
 github_id:            # filled after /pm:sync
 ---
@@ -68,4 +70,5 @@ spec: ""              # path to linked spec, or blank
 - `github_url` and `github_id` are left blank until `/pm:sync` runs
 - `status` values are lowercase, use the exact values listed above
 - `size` values are uppercase: XS, S, M, L
+- `priority` is optional. Values are uppercase: P1, P2, P3, P4. Leave blank if not set.
 - Never use placeholder text like "TBD" or "TODO" in frontmatter

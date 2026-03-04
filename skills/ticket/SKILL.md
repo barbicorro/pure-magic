@@ -44,7 +44,14 @@ Use AskUserQuestion to gather:
 
 7. **Definitions**: If the ticket depends on a defined term (e.g., "active user", "completed session"), ask: what is included, what is excluded, are the categories mutually exclusive, and what are the edge cases?
 
-8. **Size**: How big is this?
+8. **Priority** (optional): Does this have a priority?
+   - P1: must ship now, blocking users or the business
+   - P2: important, should ship this cycle
+   - P3: useful but not urgent
+   - P4: nice to have, no deadline
+   - Leave blank if unsure or not needed
+
+9. **Size**: How big is this?
    - XS: a few lines, under 1 hour
    - S: small, under half a day
    - M: medium, 1-2 days
