@@ -2,5 +2,5 @@
   "name": "pm",
   "version": "0.3.0",
   "description": "Spec-driven PM system for Claude Code. Write specs, parse tasks, sync to GitHub.",
-  "author": "Barbara Corro"
+  "author": { "name": "Barbara Corro" }
 }
