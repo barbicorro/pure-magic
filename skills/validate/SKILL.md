@@ -58,7 +58,7 @@ Interview validation failures are reported as warnings. They do not block sync (
 
 ### Shared gate (tasks and tickets)
 
-- **Priority value**: If the `priority` field is present and non-empty, it must be one of: P1, P2, P3, P4. Any other value (e.g., "high", "critical", "1") fails this gate.
+- **Priority value**: If the `priority` field is present and non-empty, it must be one of: high, medium, low. Any other value (e.g., "P1", "critical", "1") fails this gate.
 
 ### Frontmatter completeness
 

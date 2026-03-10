@@ -26,7 +26,7 @@ created: 2026-01-01
 updated: 2026-01-01
 depends_on: []        # list of sibling task filenames, e.g. [build-onboarding-wizard.md]
 spec_section: "Main Features > Session Creation"
-priority:             # optional: P1 | P2 | P3 | P4
+priority:             # optional: high | medium | low
 sync_url:             # filled after /pm:sync
 sync_id:              # filled after /pm:sync
 ---
@@ -42,7 +42,7 @@ status: local         # local | synced
 size: S               # XS | S | M | L
 created: 2026-01-01
 updated: 2026-01-01
-priority:             # optional: P1 | P2 | P3 | P4
+priority:             # optional: high | medium | low
 sync_url:             # filled after /pm:sync
 sync_id:              # filled after /pm:sync
 ---
@@ -70,5 +70,5 @@ spec: ""              # path to linked spec, or blank
 - `sync_url` and `sync_id` are left blank until `/pm:sync` runs
 - `status` values are lowercase, use the exact values listed above
 - `size` values are uppercase: XS, S, M, L
-- `priority` is optional. Values are uppercase: P1, P2, P3, P4. Leave blank if not set.
+- `priority` is optional. Values are lowercase: high, medium, low. Leave blank if not set.
 - Never use placeholder text like "TBD" or "TODO" in frontmatter

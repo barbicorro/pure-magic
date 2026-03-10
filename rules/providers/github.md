@@ -56,10 +56,9 @@ Map the task/ticket `priority` frontmatter value to the GitHub Project Priority 
 
 | Frontmatter | GitHub option name |
 |---|---|
-| P1 | High |
-| P2 | Medium |
-| P3 | Low |
-| P4 | Low |
+| high | High |
+| medium | Medium |
+| low | Low |
 
 Find the matching option by `name` in the field's `options` array. Use that option's `id`.
 

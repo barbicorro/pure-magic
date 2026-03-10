@@ -57,10 +57,9 @@ Map the task/ticket `priority` frontmatter value to the Jira native priority nam
 
 | Frontmatter | Jira priority name |
 |---|---|
-| P1 | Highest |
-| P2 | High |
-| P3 | Medium |
-| P4 | Low |
+| high | High |
+| medium | Medium |
+| low | Low |
 
 ## Dependencies
 
