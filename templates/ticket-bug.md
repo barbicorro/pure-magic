@@ -6,8 +6,8 @@ size: S
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 priority:
-github_url:
-github_id:
+sync_url:
+sync_id:
 ---
 
 # Ticket title

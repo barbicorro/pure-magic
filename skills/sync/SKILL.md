@@ -1,9 +1,9 @@
 ---
 name: sync
-description: Push local tasks and tickets to GitHub Issues
+description: Push local tasks and tickets to GitHub Issues or Jira Cloud
 argument-hint: <project> <feature-name|ticket-name|--all>
 model: sonnet
-allowed-tools: Read, Write, Bash, AskUserQuestion
+allowed-tools: Read, Write, Bash, AskUserQuestion, mcp__atlassian__jira_search, mcp__atlassian__jira_create_issue, mcp__atlassian__jira_create_issue_link, mcp__atlassian__jira_get_project_versions, mcp__atlassian__jira_create_version
 disable-model-invocation: true
 ---
 
@@ -20,13 +20,24 @@ Expected format:
 Parse $ARGUMENTS to extract `project` and `target`. If either is missing:
 "Usage: /pm:sync <project> <feature-name|ticket-name|--all>"
 
-Read `<project>/pm-config.md` (required). Extract `github_repo`. If pm-config.md is not found, stop:
+Read `<project>/pm-config.md` (required). If pm-config.md is not found, stop:
 "No pm-config.md found for <project>. Create one first."
 
-Split `github_repo` on `/` to get `owner` (first segment) and `repo` (second segment). Use these separately in all commands that require them.
+Extract `provider` from pm-config frontmatter. If the field is missing or blank, default to `github`.
+
+**Load provider rules.** Check for a project override first:
+- If `.claude/overrides/rules/providers/<provider>.md` exists, Read and follow it.
+- Otherwise Read `.claude/rules/providers/<provider>.md`.
+
+If provider is `github`:
+- Extract `github_repo` from pm-config. Split on `/` to get `owner` and `repo`.
+- If `.claude/overrides/rules/github-labels.md` exists, Read it; otherwise the auto-loaded `/rules/github-labels.md` is already in context.
+
+If provider is `jira`:
+- Extract `jira.host`, `jira.project_key`, and `jira.issue_type` from pm-config.
+- Verify the Atlassian MCP server is available as described in the Jira provider rules. Stop with setup instructions if the server is not reachable.
 
 If `.claude/overrides/rules/frontmatter.md` exists, Read and follow it instead of the auto-loaded `/rules/frontmatter.md`.
-If `.claude/overrides/rules/github-labels.md` exists, Read and follow it instead of the auto-loaded `/rules/github-labels.md`.
 If `.claude/overrides/rules/task-quality.md` exists, Read and follow it instead of the auto-loaded `/rules/task-quality.md`.
 
 ## Step 1: Collect what will be synced
@@ -35,11 +46,11 @@ Depending on the target:
 
 **Single feature** (`feature-name`):
 - Read all task files in `<project>/tasks/<feature-name>/` (all .md files)
-- Skip any tasks that already have a `github_id` set (already synced)
+- Skip any tasks that already have a `sync_id` set (already synced)
 
 **Single ticket** (`ticket-name`):
 - Read `<project>/tickets/<ticket-name>.md`
-- If it already has a `github_id`, stop: "This ticket is already synced at <github_url>"
+- If it already has a `sync_id`, stop: "This ticket is already synced at <sync_url>"
 
 **All** (`--all`):
 - Scan `<project>/tasks/` for any task file with `status: local`
@@ -48,50 +59,29 @@ Depending on the target:
 
 ## Step 2: Quality check
 
-Run `/pm:validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any GitHub issues.
+Run `/pm:validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any issues.
 "These items have quality issues and cannot be synced. Fix them and try again:"
 
-## Step 3: Milestone
+## Step 3: Milestone / Fix Version
 
-Fetch existing milestones from the repo:
-```bash
-gh api repos/<owner>/<repo>/milestones --jq '.[].title'
-```
+Use AskUserQuestion to ask: "Assign a milestone to all items in this sync?" with options built from the provider pattern (fetch existing milestones or fix versions, offer to create a new one, and offer "No milestone").
 
-Use AskUserQuestion to ask: "Assign a milestone to all items in this sync?" with options:
-- Each existing milestone by name
-- "Create new milestone"
-- "No milestone"
+Follow the milestone/version pattern from the provider rules loaded in setup.
 
-If "Create new milestone": ask for the name and optional due date, then create it:
-```bash
-gh api repos/<owner>/<repo>/milestones -f title="<name>" -f due_on="<date>"
-```
-If no due date, omit the `-f due_on` flag.
+Store the chosen milestone or version for use in Step 6. If "No milestone", omit the milestone/version field from issue creation.
 
-Store the chosen milestone name for use in Step 6. If "No milestone", skip adding `--milestone` to issue creation commands.
+## Step 3.5: Project board (GitHub only)
 
-## Step 3.5: GitHub Project
+Skip this step entirely for Jira. Jira issues appear on the board automatically when created.
 
-Fetch the owner's projects:
-```bash
-gh project list --owner <owner> --format json
-```
-
-This returns a JSON array. Each project has `number`, `title`, and `id` (the GraphQL node ID). Build a display list of `title (#number)` for the PM to choose from.
-
-Use AskUserQuestion to ask: "Add all items to a GitHub project?" with options:
-- Each project by title
-- "No project"
-
-If a project is chosen, store both its `number` (used with `gh project item-add`) and its `id` node ID (used with `gh project item-edit`). If "No project", skip the project step entirely.
+For GitHub: follow the project board pattern from the GitHub provider rules. Use AskUserQuestion to ask whether to add items to a project. If a project is chosen, store both its `number` and its `id` node ID. If "No project", skip the project step.
 
 ## Step 4: Preview
 
 Show the PM a clear preview of what will be created:
 
 ```
-Ready to sync to [github_repo]:
+Ready to sync to [provider: github_repo or jira host/project_key]:
 
 feature-name:
   #  task-title.md  [S] [P1]  Task title 1
@@ -100,9 +90,9 @@ feature-name:
 TICKETS:
   #  fix-login-redirect.md  [bug, XS] [P2]  Fix login redirect
 
-Milestone: <chosen milestone or "none">
-Project:   <chosen project or "none">
-Total: 2 tasks, 1 ticket = 3 GitHub issues
+Milestone: <chosen milestone/version or "none">
+Project:   <chosen project or "none">  (GitHub only)
+Total: 2 tasks, 1 ticket = 3 issues
 
 Proceed? (yes/no)
 ```
@@ -111,19 +101,14 @@ Use AskUserQuestion to get confirmation. If the PM says no, stop cleanly.
 
 ## Step 5: Ensure labels exist
 
-For each label defined in the labels rule loaded in setup, check if it exists in the repo:
-```bash
-gh label list --repo <github_repo> --json name
-```
+Follow the labels pattern from the provider rules loaded in setup.
 
-Create any missing labels:
-```bash
-gh label create "<label>" --repo <github_repo> --color "<color>" --description "<desc>"
-```
+For GitHub: check if labels exist in the repo and create any that are missing.
+For Jira: labels are global strings. No creation step is needed.
 
-## Step 6: Create GitHub issues
+## Step 6: Create issues
 
-The body of each GitHub issue is the markdown content of the local file, with the YAML frontmatter stripped. Do not reformat or restructure the content. The file is already the issue. Skip any section whose body is empty (e.g., an empty `## Notes` section).
+The body of each issue is the markdown content of the local file, with YAML frontmatter stripped. Do not reformat or restructure the content. Skip any section whose body is empty.
 
 For tasks only, append a footer after the last section:
 ```
@@ -131,81 +116,34 @@ For tasks only, append a footer after the last section:
 _Spec section: <spec_section value>_
 ```
 
-### For tasks
+Follow the issue creation pattern from the provider rules loaded in setup. After creating each issue:
+- Update frontmatter: `status: synced`, `sync_url`, `sync_id`, `updated`
+- Do not rename the file.
+
+For GitHub: if a project was chosen, add the issue to it and apply the priority field as described in the GitHub provider rules.
+
+### Dependency handling (tasks only)
 
 Maintain a visited set of filenames already processed in this sync run to prevent infinite loops from circular dependencies.
 
 Before creating a task's issue, check its `depends_on` list. For each dependency filename listed:
 - If the filename is already in the visited set, skip it.
-- Add it to the visited set, then read the file and check if it has a `github_id`.
-- If it does not, sync that dependency first (create its GitHub issue and update its frontmatter) before continuing with the current task.
-- Repeat recursively until all dependencies in the chain have a `github_id`.
+- Add it to the visited set, then read the file and check if it has a `sync_id`.
+- If it does not, sync that dependency first (create its issue and update its frontmatter) before continuing with the current task.
+- Repeat recursively until all dependencies in the chain have a `sync_id`.
 
-If a circular dependency is detected (a file depends on a file that is already mid-sync), report it clearly and skip that dependency: "Circular dependency detected: <filename> -> <dep> -> ... -> <filename>. Skipping."
+If a circular dependency is detected, report it clearly and skip: "Circular dependency detected: <filename> -> <dep> -> ... -> <filename>. Skipping."
 
-When creating an issue for a task that has `depends_on`, append a "Blocked by" section to the issue body after the spec footer:
-```
-**Blocked by:** #<github_id>, #<github_id>
-```
-Only include dependencies that have a `github_id` (all of them will, after the auto-sync step above).
-
-```bash
-gh issue create \
-  --repo <github_repo> \
-  --title "<title from task frontmatter>" \
-  --body "<task file content with frontmatter stripped + footer + blocked-by line if applicable>" \
-  --label "task,<size-label>" \
-  --milestone "<milestone name>"   # omit if no milestone chosen
-```
-
-After creating each issue:
-- Update frontmatter: `status: synced`, `github_url`, `github_id`, `updated`
-- Do not rename the file.
-- If a project was chosen, add the issue to it and capture the returned item ID:
-```bash
-gh project item-add <project-number> --owner <owner> --url <issue-url> --format json
-```
-Parse the `.id` field from the output — this is the item's node ID, needed for the next step.
-
-If the task has a `priority` field set, set the Priority field on the project item. Fetch the project's fields once per sync run (cache the result — do not re-fetch for each item):
-```bash
-gh project field-list <project-number> --owner <owner> --format json
-```
-The output is a JSON array of field objects. Each has an `id` (node ID), `name`, and for single-select fields, an `options` array where each option has `id` and `name`. Find the field whose `name` is "Priority". From its `options`, find the entry whose `name` matches the task's priority value (P1/P2/P3/P4). Use those IDs to set the field:
-```bash
-gh project item-edit \
-  --project-id <project-node-id> \
-  --id <item-node-id> \
-  --field-id <priority-field-node-id> \
-  --single-select-option-id <option-node-id>
-```
-`<project-node-id>` is the `id` captured from Step 3.5. `<item-node-id>` is the `.id` from `gh project item-add` above.
-
-If no "Priority" field exists in the project, or the task's priority value does not match any option, skip silently.
+After all dependencies have a `sync_id`, follow the dependency linking pattern from the provider rules (append "Blocked by" to issue body for GitHub, create issue links for Jira).
 
 If any issue creation fails: report it clearly but continue with the rest. At the end, list what succeeded and what failed.
 
-### For standalone tickets
-
-```bash
-gh issue create \
-  --repo <github_repo> \
-  --title "<title from ticket frontmatter>" \
-  --body "<ticket file content with frontmatter stripped>" \
-  --label "<type>,<size-label>" \
-  --milestone "<milestone name>"   # omit if no milestone chosen
-```
-
-Update ticket frontmatter: `status: synced`, `github_url`, `github_id`, `updated`.
-
-If a project was chosen, add the ticket to it using `gh project item-add`, capture the item node ID, and apply priority if set — using the same field lookup logic as for tasks.
-
 ## Step 7: Summary
 
-Print a summary of what was created:
+Print a summary of what was created. Use the issue ID format for the active provider (GitHub: `#N`, Jira: `KEY-N`).
 
 ```
-Synced to [github_repo]:
+Synced to [github_repo or jira host/project_key]:
 
   Task  #43:  Task title 1   [S]  -> <url>
   Task  #44:  Task title 2   [M]  -> <url>

@@ -19,10 +19,20 @@ OVERRIDES_TEMPLATES="$WORKSPACE_ROOT/.claude/overrides/templates"
 
 mkdir -p "$RULES_DEST" "$TEMPLATES_DEST" "$OVERRIDES_RULES" "$OVERRIDES_TEMPLATES"
 
-# Copy rules, skipping files that already exist
+# Copy top-level rules, skipping files that already exist
 for src_file in "$RULES_SRC"/*.md; do
   filename="$(basename "$src_file")"
   dest_file="$RULES_DEST/$filename"
+  if [ ! -f "$dest_file" ]; then
+    cp "$src_file" "$dest_file"
+  fi
+done
+
+# Copy providers/ subdirectory rules, skipping files that already exist
+mkdir -p "$RULES_DEST/providers" "$OVERRIDES_RULES/providers"
+for src_file in "$RULES_SRC/providers"/*.md; do
+  filename="$(basename "$src_file")"
+  dest_file="$RULES_DEST/providers/$filename"
   if [ ! -f "$dest_file" ]; then
     cp "$src_file" "$dest_file"
   fi

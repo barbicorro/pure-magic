@@ -26,8 +26,7 @@ A SessionStart hook (`hooks/hooks.json`) runs `scripts/ensure-workspace.sh` at t
 | `/pm:parse` | Convert spec to tasks |
 | `/pm:ticket` | Create a standalone ticket |
 | `/pm:interview` | Co-create a customer interview guide (Mom Test) |
-| `/pm:sync` | Push to GitHub Issues |
-| `/pm:status` | Dashboard with PR delivery status |
+| `/pm:sync` | Push to GitHub Issues or Jira Cloud |
 | `/pm:validate` | Validate files against quality and frontmatter standards |
 
 `/pm:validate` is called by other skills before syncing and after file creation. A PM can also run it directly to check files at any time.
@@ -56,6 +55,7 @@ Agents are subagent definitions with their own system prompt, tool restrictions,
 PMs can customize rules or templates per project without losing updates. Place a modified file in:
 
 - `.claude/overrides/rules/<name>.md` - overrides `.claude/rules/<name>.md`
+- `.claude/overrides/rules/providers/<name>.md` - overrides `.claude/rules/providers/<name>.md`
 - `.claude/overrides/templates/<name>.md` - overrides `.claude/templates/<name>.md`
 
 Skills check the override path first. If the file exists, they Read and follow it instead of the copied default. Override directories are created empty by the SessionStart hook and are never touched by it on subsequent runs. The source repo does not track them.

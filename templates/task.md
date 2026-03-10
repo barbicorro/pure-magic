@@ -8,8 +8,8 @@ updated: YYYY-MM-DD
 depends_on: []
 spec_section: "Main Features > Section Name"
 priority:
-github_url:
-github_id:
+sync_url:
+sync_id:
 ---
 
 # Task title

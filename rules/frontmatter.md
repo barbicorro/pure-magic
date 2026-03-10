@@ -26,9 +26,9 @@ created: 2026-01-01
 updated: 2026-01-01
 depends_on: []        # list of sibling task filenames, e.g. [build-onboarding-wizard.md]
 spec_section: "Main Features > Session Creation"
-priority:             # optional: P1 | P2 | P3 | P4 — used to set GitHub project priority field
-github_url:           # filled after /pm:sync
-github_id:            # filled after /pm:sync
+priority:             # optional: P1 | P2 | P3 | P4
+sync_url:             # filled after /pm:sync
+sync_id:              # filled after /pm:sync
 ---
 ```
 
@@ -42,9 +42,9 @@ status: local         # local | synced
 size: S               # XS | S | M | L
 created: 2026-01-01
 updated: 2026-01-01
-priority:             # optional: P1 | P2 | P3 | P4 — used to set GitHub project priority field
-github_url:           # filled after /pm:sync
-github_id:            # filled after /pm:sync
+priority:             # optional: P1 | P2 | P3 | P4
+sync_url:             # filled after /pm:sync
+sync_id:              # filled after /pm:sync
 ---
 ```
 
@@ -67,7 +67,7 @@ spec: ""              # path to linked spec, or blank
 
 - Dates are always ISO 8601 format: `YYYY-MM-DD`
 - `updated` must be set to today's date any time a file is modified
-- `github_url` and `github_id` are left blank until `/pm:sync` runs
+- `sync_url` and `sync_id` are left blank until `/pm:sync` runs
 - `status` values are lowercase, use the exact values listed above
 - `size` values are uppercase: XS, S, M, L
 - `priority` is optional. Values are uppercase: P1, P2, P3, P4. Leave blank if not set.

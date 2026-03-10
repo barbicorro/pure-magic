@@ -42,7 +42,7 @@ Apply the standards from the interview-quality rule loaded in setup (override if
 - **No anti-patterns**: Flag questions matching Mom Test anti-patterns (future hypotheticals, leading questions, pitching). These are warnings, not hard failures.
 - **No placeholder text**: No field or section may contain "TBD", "TODO", or "placeholder" (case-insensitive).
 
-Interview validation failures are reported as warnings. They do not block sync (interviews are not synced to GitHub).
+Interview validation failures are reported as warnings. They do not block sync (interviews are never synced).
 
 ### Quality gates (tasks and tickets)
 
@@ -63,7 +63,7 @@ Interview validation failures are reported as warnings. They do not block sync (
 ### Frontmatter completeness
 
 - All required fields for the file type must be present (per the frontmatter rule loaded in setup).
-- For `task` and `ticket` files only: `github_url` and `github_id` must be blank (empty value, not missing key). Interview and spec files do not have these fields.
+- For `task` and `ticket` files only: `sync_url` and `sync_id` must be blank (empty value, not missing key). For backward compatibility, also accept `github_url` and `github_id` as equivalent field names if `sync_url`/`sync_id` are not present. Interview and spec files do not have these fields.
 - Dates must be in ISO 8601 format: YYYY-MM-DD.
 
 ## Output
