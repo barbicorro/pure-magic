@@ -1,0 +1,26 @@
+{
+  "skill_name": "spec",
+  "evals": [
+    {
+      "id": 0,
+      "name": "notification-center",
+      "prompt": "Run /pm:spec for the test-acme project, feature: notification-center. Minimal context provided — the skill must interview to fill gaps.",
+      "expected_output": "A spec file at test-acme/specs/notification-center.md covering all required sections, with a spec-reviewer report presented at the end.",
+      "files": ["test-acme/CLAUDE.md"]
+    },
+    {
+      "id": 1,
+      "name": "export-reports",
+      "prompt": "Run /pm:spec for the test-acme project, feature: export-reports. A rough idea is provided: PMs want to export project status reports as PDF or CSV to share with stakeholders who don't have app access.",
+      "expected_output": "A spec file at test-acme/specs/export-reports.md that builds on the rough idea and fills in missing detail, with a spec-reviewer report presented at the end.",
+      "files": ["test-acme/CLAUDE.md"]
+    },
+    {
+      "id": 2,
+      "name": "guest-access",
+      "prompt": "Run /pm:spec for the test-acme project, feature: guest-access. Minimal context — this feature has several non-obvious blindspots (link expiry, permissions, archived projects, multi-project isolation).",
+      "expected_output": "A spec file at test-acme/specs/guest-access.md that surfaces and addresses the non-obvious edge cases, with a spec-reviewer report presented at the end.",
+      "files": ["test-acme/CLAUDE.md"]
+    }
+  ]
+}
