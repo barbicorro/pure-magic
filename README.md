@@ -15,33 +15,46 @@ Then the dev team picks up the GitHub Issue, plans with Claude Code (optional), 
 
 ## Install
 
-pure-magic is a Claude Code plugin. Add it to your PM workspace's `settings.json`:
+1. Open **Claude Desktop**
+2. Click **+** in the prompt area
+3. Go to **Plugins**
+4. Click **Add plugin**
+5. Go to the **Personal** tab
+6. Click **+**
+7. Select **Add marketplace from GitHub**
+8. Paste this URL: `https://github.com/barbicorro/pure-magic`
+9. You will see the **pm** plugin appear - click **Install**
+10. Restart Claude. The plugin activates automatically on your next session.
 
-```json
-{
-  "plugins": [
-    { "path": "/path/to/pure-magic" }
-  ]
-}
-```
-
-On the next session start, the plugin's SessionStart hook copies `rules/` and `templates/` into your workspace's `.claude/` directory automatically.
-
-For development (testing the plugin locally):
-
-```bash
-claude --plugin-dir /path/to/pure-magic
-```
+That is it! 
 
 ## Setup per project
 
-Create a `pm-config.md` in each project folder:
+Each project needs a `pm-config.md` file. This tells pure-magic which GitHub repo to use, who is on the team, and a few other settings.
+
+**Option A: Create it manually**
+
+Create a new file called `pm-config.md` inside your project folder and paste this in:
+
+```
+---
+project: your-project-name
+github_repo: owner/repo-name
+team:
+  pm: Your Name
+  devs: []
+---
+```
+
+Replace `your-project-name`, `owner/repo-name`, and `Your Name` with your own details.
+
+**Option B: Copy the template (requires terminal)**
 
 ```bash
 cp .claude/templates/pm-config.md <your-project>/pm-config.md
 ```
 
-Edit the frontmatter to set your `github_repo`, team, and preferences.
+Then open the file and fill in your details.
 
 ## Skills
 
