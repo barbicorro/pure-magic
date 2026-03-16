@@ -14,6 +14,7 @@ Spec-driven project management for Claude Code. Write specs with AI, generate Gi
 Then the dev team picks up the GitHub Issue, plans with Claude Code (optional), implements, opens a PR. Everything connects through GitHub Issues, no shared files needed.
 
 ## Install
+https://github.com/user-attachments/assets/5a069547-2561-4d50-ab16-734d1eb45c04
 
 1. Open **Claude Desktop**
 2. Click **+** in the prompt area
