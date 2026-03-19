@@ -1,10 +1,9 @@
 ---
 name: sync
-description: Push local tasks and tickets to GitHub Issues or Jira Cloud
+description: Push local tasks and tickets to GitHub Issues, Jira Cloud, or Asana
 argument-hint: <project> <feature-name|ticket-name|--all>
 model: sonnet
 allowed-tools: Read, Write, Bash, AskUserQuestion, mcp__atlassian__jira_search, mcp__atlassian__jira_create_issue, mcp__atlassian__jira_create_issue_link, mcp__atlassian__jira_get_project_versions, mcp__atlassian__jira_create_version
-disable-model-invocation: true
 ---
 
 # /pm:sync
@@ -37,6 +36,10 @@ If provider is `jira`:
 - Extract `jira.host`, `jira.project_key`, and `jira.issue_type` from pm-config.
 - Verify the Atlassian MCP server is available as described in the Jira provider rules. Stop with setup instructions if the server is not reachable.
 
+If provider is `asana`:
+- Extract `asana.project_gid` and `asana.workspace_gid` from pm-config.
+- Verify `ASANA_PAT` is set as described in the Asana provider rules. Stop with setup instructions if not set.
+
 If `.claude/overrides/rules/frontmatter.md` exists, Read and follow it instead of the auto-loaded `/rules/frontmatter.md`.
 If `.claude/overrides/rules/task-quality.md` exists, Read and follow it instead of the auto-loaded `/rules/task-quality.md`.
 
@@ -62,17 +65,20 @@ Depending on the target:
 Run `/pm:validate` on all files collected in Step 1. If any file fails validation, list the failures clearly and stop. Do not create any issues.
 "These items have quality issues and cannot be synced. Fix them and try again:"
 
-## Step 3: Milestone / Fix Version
+## Step 3: Milestone / Section / Fix Version
 
-Use AskUserQuestion to ask: "Assign a milestone to all items in this sync?" with options built from the provider pattern (fetch existing milestones or fix versions, offer to create a new one, and offer "No milestone").
+Use AskUserQuestion to ask about grouping, with options built from the provider pattern:
+- GitHub: fetch existing milestones, offer to create a new one, offer "No milestone"
+- Jira: fetch existing fix versions, offer to create a new one, offer "No fix version"
+- Asana: fetch existing sections, offer to create a new one, offer "No section"
 
-Follow the milestone/version pattern from the provider rules loaded in setup.
+Follow the milestone/version/section pattern from the provider rules loaded in setup.
 
-Store the chosen milestone or version for use in Step 6. If "No milestone", omit the milestone/version field from issue creation.
+Store the chosen value for use in Step 6. If the PM chooses none, omit that field from issue creation.
 
 ## Step 3.5: Project board (GitHub only)
 
-Skip this step entirely for Jira. Jira issues appear on the board automatically when created.
+Skip this step entirely for Jira and Asana. Both place issues on the project automatically when created.
 
 For GitHub: follow the project board pattern from the GitHub provider rules. Use AskUserQuestion to ask whether to add items to a project. If a project is chosen, store both its `number` and its `id` node ID. If "No project", skip the project step.
 
@@ -81,7 +87,7 @@ For GitHub: follow the project board pattern from the GitHub provider rules. Use
 Show the PM a clear preview of what will be created:
 
 ```
-Ready to sync to [provider: github_repo or jira host/project_key]:
+Ready to sync to [provider: github_repo or jira host/project_key or asana project_gid]:
 
 feature-name:
   #  task-title.md  [S] [P1]  Task title 1
@@ -99,12 +105,13 @@ Proceed? (yes/no)
 
 Use AskUserQuestion to get confirmation. If the PM says no, stop cleanly.
 
-## Step 5: Ensure labels exist
+## Step 5: Ensure labels / tags exist
 
 Follow the labels pattern from the provider rules loaded in setup.
 
 For GitHub: check if labels exist in the repo and create any that are missing.
 For Jira: labels are global strings. No creation step is needed.
+For Asana: fetch existing tags in the workspace. Create any tags that are missing before proceeding.
 
 ## Step 6: Create issues
 
@@ -134,16 +141,16 @@ Before creating a task's issue, check its `depends_on` list. For each dependency
 
 If a circular dependency is detected, report it clearly and skip: "Circular dependency detected: <filename> -> <dep> -> ... -> <filename>. Skipping."
 
-After all dependencies have a `sync_id`, follow the dependency linking pattern from the provider rules (append "Blocked by" to issue body for GitHub, create issue links for Jira).
+After all dependencies have a `sync_id`, follow the dependency linking pattern from the provider rules (append "Blocked by" to issue body for GitHub, create issue links for Jira, call addDependencies for Asana).
 
 If any issue creation fails: report it clearly but continue with the rest. At the end, list what succeeded and what failed.
 
 ## Step 7: Summary
 
-Print a summary of what was created. Use the issue ID format for the active provider (GitHub: `#N`, Jira: `KEY-N`).
+Print a summary of what was created. Use the issue ID format for the active provider (GitHub: `#N`, Jira: `KEY-N`, Asana: task GID).
 
 ```
-Synced to [github_repo or jira host/project_key]:
+Synced to [github_repo or jira host/project_key or asana project_gid]:
 
   Task  #43:  Task title 1   [S]  -> <url>
   Task  #44:  Task title 2   [M]  -> <url>

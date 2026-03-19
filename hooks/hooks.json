@@ -2,7 +2,13 @@
   "hooks": {
     "SessionStart": [
       {
-        "command": "${CLAUDE_PLUGIN_ROOT}/scripts/ensure-workspace.sh"
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/ensure-workspace.sh"
+          }
+        ]
       }
     ]
   }

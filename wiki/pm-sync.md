@@ -1,10 +1,10 @@
 # /pm:sync
 
-Pushes local tasks and tickets to GitHub Issues or Jira Cloud.
+Pushes local tasks and tickets to GitHub Issues, Jira Cloud, or Asana.
 
 ## Why this exists
 
-Creating issues in GitHub or Jira by hand is slow. For every task, you open the tracker, fill in the title, description, labels, and priority, then go back to your notes to copy the context across. With ten tasks and dependencies between them, you also have to figure out the creation order manually so linked issues exist before you reference them.
+Creating issues in GitHub, Jira, or Asana by hand is slow. For every task, you open the tracker, fill in the title, description, labels, and priority, then go back to your notes to copy the context across. With ten tasks and dependencies between them, you also have to figure out the creation order manually so linked issues exist before you reference them.
 
 `/pm:sync` handles that in one command. It reads your local files, validates them, resolves dependency order, and creates everything in the tracker. Each local file is updated with the issue URL and ID so the link is permanent.
 
@@ -67,7 +67,35 @@ jira:
   issue_type: Story
 ```
 
-**3. Add the Atlassian MCP server** if using Jira. Add this to `.mcp.json` in your project root (create the file if it does not exist):
+For Asana:
+```yaml
+provider: asana
+asana:
+  project_gid: "1234567890123456"
+  workspace_gid: "9876543210987654"
+```
+
+**3. Configure authentication** for your provider.
+
+For GitHub: uses your existing `gh` CLI authentication - no extra setup needed. If you have not installed the GitHub CLI yet, follow the official guide: https://cli.github.com/manual/installation
+
+For Asana:
+
+1. Go to Asana > your profile photo > My Settings > Apps > Personal Access Tokens.
+2. Create a new token and copy it.
+3. Set it as an env var in your terminal session:
+   ```bash
+   export ASANA_PAT=your_token_here
+   ```
+4. To persist it, add the export line to your shell profile (`~/.zshrc` or `~/.bashrc`).
+
+Where to find your GIDs in Asana:
+- `project_gid`: open the project in Asana, copy the number from the URL: `app.asana.com/0/<project_gid>/...`
+- `workspace_gid`: call `GET https://app.asana.com/api/1.0/workspaces` with your PAT and copy the `gid` from the response.
+
+**Do not put your PAT in pm-config.md.** That file is committed to git. The PAT must stay in your environment only.
+
+**4. Add the Atlassian MCP server** if using Jira. Add this to `.mcp.json` in your project root (create the file if it does not exist):
 
 ```json
 {
@@ -81,5 +109,3 @@ jira:
 ```
 
 Then restart the Claude Code session. On first use, Claude will prompt you to authenticate with Atlassian via OAuth - no API tokens or env vars needed.
-
-GitHub uses your existing `gh` CLI authentication - no extra setup needed. If you have not installed the GitHub CLI yet, follow the official guide: https://cli.github.com/manual/installation
