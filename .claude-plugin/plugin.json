@@ -1,6 +1,6 @@
 {
   "name": "pm",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Spec-driven PM system for Claude Code. Write specs, parse tasks, sync to GitHub, Jira, or Asana.",
   "author": { "name": "Barbara Corro" }
 }

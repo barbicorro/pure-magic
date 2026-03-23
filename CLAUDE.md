@@ -26,6 +26,7 @@ A SessionStart hook (`hooks/hooks.json`) runs `scripts/ensure-workspace.sh` at t
 | `/pm:parse` | Convert spec to tasks |
 | `/pm:ticket` | Create a standalone ticket |
 | `/pm:interview` | Co-create a customer interview guide (Mom Test) |
+| `/pm:outcome-brief` | Pressure-test a feature idea before committing to build |
 | `/pm:sync` | Push to GitHub Issues or Jira Cloud |
 | `/pm:validate` | Validate files against quality and frontmatter standards |
 
@@ -49,6 +50,7 @@ Agents are subagent definitions with their own system prompt, tool restrictions,
 | `templates/ticket-bug.md` | Bug tickets |
 | `templates/pm-config.md` | Project config |
 | `templates/interview.md` | Customer interview guides |
+| `templates/outcome-brief.md` | Outcome brief documents |
 
 ### Overrides
 

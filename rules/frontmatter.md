@@ -63,6 +63,18 @@ spec: ""              # path to linked spec, or blank
 ---
 ```
 
+## Outcome brief files (`<project>/outcome-briefs/`)
+
+```yaml
+---
+title: "Outcome Brief: Feature Name"
+type: outcome-brief
+status: draft         # draft | final
+created: 2026-01-01
+updated: 2026-01-01
+---
+```
+
 ## Rules
 
 - Dates are always ISO 8601 format: `YYYY-MM-DD`
